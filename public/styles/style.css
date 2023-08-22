@@ -1,0 +1,18 @@
+
+.jumbotron {
+  background-image: url("fon.jpg");
+  font-family: Georgia;
+  letter-spacing: 0.1em;
+  color: rgb(142,11,0);
+  text-shadow: 1px 1px 1px rgba(255,255,255,0.6);
+}
+
+.podl {
+  padding: 0px 15px;
+  background-color: rgba(241, 241, 241, 0.84);
+}
+
+.cls-categories a {
+  font-size: 0.7em;
+  
+}
