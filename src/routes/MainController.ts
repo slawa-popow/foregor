@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import { db } from '../database/MySqlAgent';
 import { mySklad } from '../mysklad/MySklad';
-import { PathNamePlitochka, ProductsByPathCats } from '../types/TypesMySklad';
-import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList } from '../utils/funcs';
+import { PathNamePlitochka, ProductsByPathCats, QueryProducts } from '../types/TypesMySklad';
+import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
 
 class MainController {
@@ -30,6 +31,44 @@ class MainController {
         const responseResult = await getMinimizeListProds(resultSklad);
         
         return response.status(200).json(responseResult);
+    }
+
+
+    /**
+     * Выбрать данные о всех продуктах из МойСклад и записать в бд
+     */
+    async getAllProdFromMySkladAndWriteToDb(_request: Request, response: Response) {
+    
+        let nexthref: string | null | undefined = mySklad.pathes.product;
+
+            while (nexthref) {
+        
+                let limRes: QueryProducts<ProductsByPathCats> = await mySklad.getAllProduct<ProductsByPathCats>(nexthref);
+                nexthref = limRes.sizeData!.nextHref;
+                
+                const prepDataArr = preparedDataToWrite(limRes.rows);
+                for (let sqlRows of prepDataArr) {
+                    const boolOprt = db.writeAllProducts(sqlRows);
+                    if (!boolOprt)
+                        return response.status(400).json({result: 'error'});
+                }
+            
+            }
+        return response.status(200).json({result: 'ok'});
+        
+    }
+
+    // ----------------------- test db --------------------------
+
+    async postTestDb(request: Request, response: Response) {
+        const data = request.body;
+        console.log(data);
+        for (let i = 0; i < 10000; i++) {
+            
+            await db.setTestData([`Slava`, `${i}`]); 
+
+        }
+        return response.status(200).json({status: 'end'});
     }
 
 }

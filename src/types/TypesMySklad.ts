@@ -18,6 +18,8 @@ export interface Meta {
     size ?: number;
     limit ?: number;
     offset ?: number;
+    nextHref ?: string;
+    previousHref ?: string;
 };
 
 export interface Uom {
@@ -232,3 +234,20 @@ export interface ResponseQueryMySklad<T> {
     rows: T[];
 }
 
+
+export interface InfoSizeQuery {
+    size: number | null;
+    limit: number | null,
+    offset: number,
+    nextHref ?: string | null;
+    previousHref ?: string | null;
+}
+
+/**
+ * Для получения большого числа данных (продуктов) имеющих лимит
+ * на выборку из МойСклад (больше 1000 единиц ра один запрос)
+ */
+export interface QueryProducts<T> {
+    sizeData: InfoSizeQuery | null;
+    rows: T[];
+}
