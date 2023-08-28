@@ -12,10 +12,10 @@ enum Table {
 
 class MySqlAgent {
 
-    private HOST: string = process.env.HOST || '';
-    private USER: string = process.env.USER || '';
-    private DATABASE: string = process.env.DATABASE || '';
-    private PASSWORD: string = process.env.PASSWORD || '';
+    private HOST: string = process.env.PHOST || '';
+    private USER: string = process.env.PUSER || '';
+    private DATABASE: string = process.env.PDATABASE || '';
+    private PASSWORD: string = process.env.PPASSWORD || '';
     private pool: Pool | null = null;
 
     constructor() {
@@ -27,7 +27,6 @@ class MySqlAgent {
             connectionLimit: 20, 
             host: this.HOST,
             user: this.USER,
-            port: 3306,
             password: this.PASSWORD,
             database: this.DATABASE,
             waitForConnections: true,

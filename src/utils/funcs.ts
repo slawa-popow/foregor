@@ -1,4 +1,4 @@
-import { DopAttributes, PatchesToProductList, PathNamePlitochka, ProductsByPathCats,  } from "../types/TypesMySklad";
+import { DopAttributes, MinimizeResponseListProds, PatchesToProductList, PathNamePlitochka, ProductsByPathCats,  } from "../types/TypesMySklad";
 // import { mySklad } from "../mysklad/MySklad";
 
 export async function getPatchesToProductList(productFolders: PathNamePlitochka[]): Promise<PatchesToProductList[]> {
@@ -58,7 +58,7 @@ function unpackAttributes(attrs: any[]): {name: string, color: string} {
 }
 
 
-export async function getMinimizeListProds(res: ProductsByPathCats[]): Promise<any[]> {
+export async function getMinimizeListProds(res: ProductsByPathCats[]): Promise<MinimizeResponseListProds[]> {
     
     const result: any[] = [];
     for (let v of res) {

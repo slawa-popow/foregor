@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { db } from '../database/MySqlAgent';
 import { mySklad } from '../mysklad/MySklad';
-import { PathNamePlitochka, ProductsByPathCats, QueryProducts } from '../types/TypesMySklad';
+import { MinimizeResponseListProds, PathNamePlitochka, ProductsByPathCats, QueryProducts } from '../types/TypesMySklad';
 import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
 
@@ -28,7 +28,7 @@ class MainController {
         const uriData = request.body.URISklad;
         const resultSklad: ProductsByPathCats[] = await mySklad.getProductByCatsFromSklad<ProductsByPathCats>(uriData);
         
-        const responseResult = await getMinimizeListProds(resultSklad);
+        const responseResult: MinimizeResponseListProds[] = await getMinimizeListProds(resultSklad);
         
         return response.status(200).json(responseResult);
     }
@@ -60,13 +60,10 @@ class MainController {
 
     // ----------------------- test db --------------------------
 
-    async postTestDb(request: Request, response: Response) {
-        const data = request.body;
-        console.log(data);
+    async postTestDb(_request: Request, response: Response) {
+        
         for (let i = 0; i < 10000; i++) {
-            
             await db.setTestData([`Slava`, `${i}`]); 
-
         }
         return response.status(200).json({status: 'end'});
     }

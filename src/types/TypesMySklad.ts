@@ -251,3 +251,13 @@ export interface QueryProducts<T> {
     sizeData: InfoSizeQuery | null;
     rows: T[];
 }
+
+
+export interface MinimizeResponseListProds {
+    article: string;
+    code: string;
+    color: string;
+    name: string;
+    pathName: string;
+    idHref: string;
+};

@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack'); // для подключения jquery 
 
 module.exports = {
-  entry: __dirname + '/public/index.js',
+  entry: __dirname + '/public/index.ts',
 
   output: {
     filename: 'app.js',
@@ -18,14 +18,17 @@ module.exports = {
     })
   ], 
 
-  
-
   // mode: 'production',
   mode: 'development',
   watch: true,
   devtool: 'source-map',
   module: {
     rules: [
+      {
+        test: /\.ts?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.(?:js|mjs|cjs)$/,
         exclude: /node_modules/,
@@ -48,6 +51,8 @@ module.exports = {
       
     ]
   },
-  
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
 
 };

@@ -63,13 +63,10 @@ class MySklad {
 
 
     async getAllProduct<T>(href: string | null = null): Promise<QueryProducts<T>> {
-        try {
-            let result;
-            if (!href) {
-                result  = await axios.get(this.pathes.product, { headers: this.headers },);
-            } else {
-                result  = await axios.get(href, { headers: this.headers },);
-            }
+        try { 
+            const url = (!href) ? this.pathes.product : href;
+            
+            const result  = await axios.get(url, { headers: this.headers },);
             const resultData: ResponseQueryMySklad<T> = result.data; 
             const sizeData: InfoSizeQuery = {
                 size: resultData.meta.size || null,
@@ -82,7 +79,7 @@ class MySklad {
             return returnResult;
     
         } catch (err) { console.log(`Error -> MySklad->getAllProduct() try/catch `, err); }
-        return {sizeData: null, rows: []};
+        return {sizeData: null, rows: []}; 
     }
 
 }

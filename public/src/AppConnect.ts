@@ -3,25 +3,25 @@
 const DEVHOST = '/';
 const HOST = DEVHOST;
 
-class AppConnect {
+export class AppConnect {
 
     host = '/';
-    constructor(host) {
+    constructor(host: string) {
         this.host = host;
     }
 
-    async getProdFolders(url) {
+    async getProdFolders(url: string) {
         const resp = await fetch(this.host + url, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json;charset=utf-8'
+              'Content-Type': 'application/json;charset=utf-8' 
             },
             body: JSON.stringify({})
         });
         return await resp.json();
     }
 
-    async getProductByCats(url, uri) {
+    async getProductByCats(url: string, uri: string) {
         const requestData = {URISklad: uri};
         const resp = await fetch(url, {
             method: 'POST',
@@ -31,7 +31,7 @@ class AppConnect {
             body: JSON.stringify(requestData)
         });
         const result = await resp.json();
-        console.log(result);
+        return result;
     }
 }
 

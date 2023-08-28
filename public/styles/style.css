@@ -1,6 +1,13 @@
 
+#media-user {
+  margin: 0;
+  padding: 0;
+  
+}
+
 .jumbotron {
   background-image: url("fon.jpg");
+  background-size: cover;
   font-family: Georgia;
   letter-spacing: 0.1em;
   color: rgb(142,11,0);
@@ -14,5 +21,14 @@
 
 .cls-categories a {
   font-size: 0.7em;
-  
+}
+
+.cntPage {
+  margin: 0;
+  padding: 0;
+}
+
+.custom-style-table {
+  margin-top: 25px;
+  font-size: 0.7em;
 }

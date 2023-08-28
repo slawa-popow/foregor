@@ -1,27 +1,52 @@
 
 <div class="jumbotron text-center">
+  <div class="container mt-2 position-relative" style="top: -55px; left: -40px; "> 
+  <div class="media p-3">
+    <img src="styles/img_avatar.png" alt="John CSS" class="mr-3 mt-3 rounded-circle" style="width:70px;">
+    <div class="media-body">
+      <h4>John CSS <small><i>Posted on February 19, 2016</i></small></h4>
+            
+    </div>
+  </div>
+</div>
   <div class="podl"><h2>ПлиточкаБай</h2></div>
   <div class="podl"><h5>Учет произведенной продукции</h5></div>
 </div>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Категории</h3>
-      <div id="div-categories" class="cls-categories list-group">
+{{!-- -------------------------------------------------------------------- --}}
 
-      </div>
+<div class="cntPage container">
+<ul class="nav nav-pills" role="tablist" style="margin: 5px 0 35px 0;">
+  <li class="nav-item border" id="li-menu-oprihod">
+    <a name="OPRIHOD" class="nav-link " data-toggle="pill" href="#menu-oprihod">Оприходование</a>
+  </li>
+  <li class="nav-item border" id="li-menu-allprod">
+    <a name="ALL_PROD" class="nav-link active" data-toggle="pill" href="#menu-allprod">Всё из Продукция Плиточка</a>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane container fade" id="menu-oprihod">...</div>
+  <div class="tab-pane container active " id="menu-allprod">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3">
+          <p style="margin-bottom: 10px;">Категории</p>
+          <div id="div-categories" class="cls-categories list-group">
+
+          </div>
+            
+        </div>
+        <div class="col-sm-9">
+          <p>Таблица продукции из <span id="id-label-table-list-from" style="font-size: 0.7em; font-weight: bold;"></span></p>
+          <div id="table-container"></div>          
+        </div>
         
+      </div>
     </div>
-    <div class="col-sm-8">
-      <h3>Заслонка 2</h3>
-      <p>Просто текст ..</p>
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi, sit ducimus suscipit 
-        libero aspernatur qui dolore veniam quo, obcaecati deleniti, iusto illum illo! 
-        Ex tempore magni doloremque saepe voluptatem laboriosam.
-      </p>
-    </div>
-    
+
   </div>
 </div>
+</div>
+{{!-- --------------------------------------------------------------------- --}}
