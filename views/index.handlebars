@@ -16,23 +16,70 @@
 {{!-- -------------------------------------------------------------------- --}}
 
 <div class="cntPage container">
-<ul class="nav nav-pills" role="tablist" style="margin: 5px 0 35px 0;">
+<ul class="nav nav-pills" role="tablist" style="margin: 5px 0 25px 0;">
   <li class="nav-item border" id="li-menu-oprihod">
-    <a name="OPRIHOD" class="nav-link " data-toggle="pill" href="#menu-oprihod">Оприходование</a>
+    <a name="OPRIHOD" class="nav-link active" data-toggle="pill" href="#menu-oprihod">Оприходование</a>
   </li>
   <li class="nav-item border" id="li-menu-allprod">
-    <a name="ALL_PROD" class="nav-link active" data-toggle="pill" href="#menu-allprod">Всё из Продукция Плиточка</a>
+    <a name="ALL_PROD" class="nav-link" data-toggle="pill" href="#menu-allprod">Всё из Продукция Плиточка</a>
   </li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-  <div class="tab-pane container fade" id="menu-oprihod">...</div>
-  <div class="tab-pane container active " id="menu-allprod">
+  <div class="tab-pane container active" id="menu-oprihod">
+    <div class="container-fluid" style="margin: 0; padding: 0;">
+      <div class="bckg-row">
+        <div class="row form-opihodov" >
+
+          <label for="sel-pathName">Категории:</label>
+          <select class="form-control" id="sel-pathName" name="sellist-pathName">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+
+          <label for="sel-name">Название:</label>
+          <select class="form-control" id="sel-name" name="sellist-name">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+
+        <label for="sel-color">Цвет:</label>
+          <select class="form-control" id="sel-color" name="sellist-color">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+        </select>
+
+        <label for="count-products">Количество:</label>
+        <input id="sel-count" type="text" class="form-control" id="count-products"  >
+        <br>
+       
+      </div>
+
+      <div class="row" style="margin: 16px 0;">
+        <div class="col"><button id="add-pic" type="button" class="btn btn-dark btn-sm">[вставить фото]</button></div>
+        <div class="col"><p id="name-pic" style="font-size: 0.8em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"></p></div>
+        
+      </div>
+      </div>
+      <div class="row" style="margin: 16px 0;">
+        <div class="col"><button id="input-product" type="button" class="btn btn-warning">Добавить в таблицу</button></div>
+      </div>
+
+    </div>
+  </div>
+                          {{!-- -------------- --}}
+  <div class="tab-pane container fade" id="menu-allprod">
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3">
-          <p style="margin-bottom: 10px;">Категории</p>
+          <p style="margin-bottom: 10px;">Категории (нажми):</p>
           <div id="div-categories" class="cls-categories list-group">
 
           </div>

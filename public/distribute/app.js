@@ -453,12 +453,32 @@ exports.TableProducts = exports.ClientData = void 0;
 const dom_1 = __webpack_require__(/*! ../dom */ "./public/src/dom.ts");
 // import { MinimizeResponseListProds } from "../types/TypesFrontend";
 class ClientData {
+    constructor() {
+        this.cnt = null; // динамический div контейнер для таблицы 
+    }
+    fillContainer(obj) {
+        if (this.cnt)
+            this.cnt.appendChild(obj);
+    }
+    clearContainer() {
+        if (this.cnt)
+            for (let domElem of Array.from(this.cnt.children)) {
+                this.cnt.removeChild(domElem);
+            }
+    }
 }
 exports.ClientData = ClientData;
+/**
+ * Порядок: экзмпл ClientData управляет своим содержимым.
+ * у него есть объект-контейнер html и колбек-метод.
+ * Сначала где-то получаю данные из сервера вызовом команды Command, данные превращаю в
+ * объект Holder<T>, потом его отдаю на выполнение ResultHolder.execute(holder),
+ * последний в  свою очередь вызывает метод executeCallback<T>(holder: Holder<T>)
+ * у ClientData
+ */
 class TableProducts extends ClientData {
     constructor(id) {
         super();
-        this.cnt = null; // динамический div контейнер для таблицы
         const c = dom_1.dom.createContainer(id);
         this.cnt = (c) ? c : null;
     }
@@ -475,16 +495,6 @@ class TableProducts extends ClientData {
             const who = document.getElementById('id-label-table-list-from');
             who.textContent = holder.name + ` [всего: ${arrdata.length}]`;
         });
-    }
-    fillContainer(obj) {
-        if (this.cnt)
-            this.cnt.appendChild(obj);
-    }
-    clearContainer() {
-        if (this.cnt)
-            for (let domElem of Array.from(this.cnt.children)) {
-                this.cnt.removeChild(domElem);
-            }
     }
 }
 exports.TableProducts = TableProducts;

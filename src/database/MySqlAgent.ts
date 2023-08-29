@@ -1,7 +1,10 @@
 
 import mysql from 'mysql2/promise';
 import { Pool } from "mysql2/promise";
+ 
 import dotenv from 'dotenv';
+import { AttributesByPathName, IReturnGetUniqPathes } from '../types/TypesDB';
+ 
  
 dotenv.config();
 
@@ -30,10 +33,70 @@ class MySqlAgent {
             password: this.PASSWORD,
             database: this.DATABASE,
             waitForConnections: true,
-            rowsAsArray: true,
+            rowsAsArray: false,
         }); 
         this.pool = pool;
     }
+
+
+    /**
+     * Вернуть {pathName: 'abc/defg', names: [...], colors: [...]} uniq атрибуты
+     * @param pathName категория по которой вернуть цвет, имя
+     */
+    async getAttributesByPathName(pathName: string): Promise<AttributesByPathName | null> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+
+                const [clrs, _services_colors] = await connection.query(`
+                SELECT DISTINCT color FROM ${Table.Products} WHERE pathName IN ("${pathName}") AND color<>'';
+                `);
+
+                const [nms, _services_names] = await connection.query(`
+                SELECT DISTINCT name FROM ${Table.Products} WHERE pathName IN ("${pathName}") AND name<>'';
+                `);
+
+                const colors = clrs as {color: string}[];
+                const names = nms as {name: string}[];
+
+                const result: AttributesByPathName = {
+                    pathName: pathName,
+                    names: [...names.map((val) => { return val.name})],
+                    colors: [...colors.map((val) => { return val.color})]
+                };
+
+                return result;
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->getAttributesByPathName()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return null;
+    }
+
+
+    /**
+     * Вернуть уникальные pathName
+     */
+    async getUniqPathes(): Promise<string[]> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                const [uniqPathsList, _services] = await connection.query(`SELECT pathName FROM ${Table.Products} GROUP BY pathName ORDER BY LENGTH(pathName);`); 
+                const uniqPaths = uniqPathsList as IReturnGetUniqPathes[];
+                const resultPaths = uniqPaths.map((val: IReturnGetUniqPathes) => {
+                    return val.pathName;
+                });
+                return resultPaths;
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->getUniqPathes()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
+    };
 
 
     async writeAllProducts(data: (string | number | boolean)[]): Promise<boolean> {

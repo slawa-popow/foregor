@@ -40,3 +40,8 @@ export const createTableProduct = (tableName: string, _dbName: string = ''): str
     `;
 };
 
+
+
+
+
+ 

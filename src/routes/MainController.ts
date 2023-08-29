@@ -5,11 +5,14 @@ import { MinimizeResponseListProds, PathNamePlitochka, ProductsByPathCats, Query
 import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
 
+
 class MainController {
 
     async getIndexPage(_request: Request, response: Response) {
         return response.status(200).render('index', {layout: 'main'}); 
     }
+
+
     
     async getAllProdFolder(_request: Request, response: Response) {
         const productFolders: PathNamePlitochka[] = await mySklad.getAllProductFolders();
@@ -18,6 +21,7 @@ class MainController {
         
         return response.status(200).json(arrPathes);
     }
+
 
     async getProductByCats(request: Request, response: Response) {
         const errors = myValidationResult(request);
@@ -31,6 +35,33 @@ class MainController {
         const responseResult: MinimizeResponseListProds[] = await getMinimizeListProds(resultSklad);
         
         return response.status(200).json(responseResult);
+    }
+
+
+    /**
+     * Unique namePath list
+     */
+    async getUniqPathes(_request: Request, response: Response) {
+        const unpaths = await db.getUniqPathes();
+        return response.status(200).json(unpaths);
+    }
+
+
+    /**
+     * 
+     * Получить атрибуты (имя, цвет) по присланному uri pathName мойсклад
+     */
+    async getAttrsByPath(request: Request, response: Response) {
+        const errors = myValidationResult(request);
+         
+        if (!errors.isEmpty()) {
+            return response.status(400).json( { errors: errors.array() } );
+        } 
+        const bodydata = request.body.pathName;
+        const findResult = await db.getAttributesByPathName(bodydata);
+        if (findResult) 
+            return response.status(200).json(findResult);
+        return response.status(404).json({ errors: ["not found"] });
     }
 
 
