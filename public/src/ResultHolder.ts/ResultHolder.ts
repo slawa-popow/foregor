@@ -1,4 +1,4 @@
-import { ClientData } from "../page/TableProducts";
+import { ClientData } from "../page/clients";
 import { HolderData } from "../types/HolderData";
 
 

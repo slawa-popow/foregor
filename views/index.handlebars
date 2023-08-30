@@ -32,46 +32,37 @@
       <div class="bckg-row">
         <div class="row form-opihodov" >
 
+        <form id="form_Oprihod" enctype="multipart/form-data">
+
           <label for="sel-pathName">Категории:</label>
           <select class="form-control" id="sel-pathName" name="sellist-pathName">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
+           {{!-- ---- dynamic fill ---- --}}
           </select>
 
           <label for="sel-name">Название:</label>
           <select class="form-control" id="sel-name" name="sellist-name">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
+           {{!-- ---- dynamic fill ---- --}}
           </select>
 
-        <label for="sel-color">Цвет:</label>
-          <select class="form-control" id="sel-color" name="sellist-color">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-        </select>
+          <label for="sel-color">Цвет:</label>
+            <select class="form-control" id="sel-color" name="sellist-color">
+            {{!-- ---- dynamic fill ---- --}}
+          </select>
 
-        <label for="count-products">Количество:</label>
-        <input id="sel-count" type="text" class="form-control" id="count-products"  >
-        <br>
+          <label for="count-products">Количество:</label>
+          <input id="sel-count" type="text" class="form-control" id="count-products" name="sellist-count" >
+
+          <label for="sel-photo">Фото:</label>
+          <input id="sel-photo" type="file" name="sellist-photo" accept="image/*" class="form-control-file border btn-sm">
+          <br>
        
+        </div>
+      
+          <div class="row" style="margin: 16px 0;">
+             <div class="col"><button id="input-product" type="submit" class="btn btn-warning">Добавить в таблицу</button></div>
+          </div>
+        </form>
       </div>
-
-      <div class="row" style="margin: 16px 0;">
-        <div class="col"><button id="add-pic" type="button" class="btn btn-dark btn-sm">[вставить фото]</button></div>
-        <div class="col"><p id="name-pic" style="font-size: 0.8em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"></p></div>
-        
-      </div>
-      </div>
-      <div class="row" style="margin: 16px 0;">
-        <div class="col"><button id="input-product" type="button" class="btn btn-warning">Добавить в таблицу</button></div>
-      </div>
-
     </div>
   </div>
                           {{!-- -------------- --}}

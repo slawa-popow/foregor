@@ -24,6 +24,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({keys: ['cookiestr'], maxAge: 24 * 60 * 60 * 5000, httpOnly: true}));
 app.use(bodyParser.urlencoded({extended: true}));  
 app.use(cors({credentials: true}));
+
+
+
 app.use('/', mainRouter);
 
 

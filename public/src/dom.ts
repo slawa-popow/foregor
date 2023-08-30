@@ -1,10 +1,12 @@
 import { GetAllProdsByPathName } from './concreteCommands/GetAllProdsByPathName';
-import { Invoker} from './invoke/Invoker';
+import { Invoker, invoker} from './invoke/Invoker';
 import { appcn } from './AppConnect';
 import { MinimizeResponseListProds } from './types/TypesFrontend';
 import { GetAllProductFolder } from './concreteCommands/GetAllProductFolder';
 import { Holder, ResultHolder } from './ResultHolder.ts/ResultHolder';
-import { ClientData} from './page/TableProducts';
+import { ClientData, FillSelectColor, FillSelectName} from './page/clients';
+import { GetAttributesByPathName } from './concreteCommands/GetAttributesByPathName';
+import { CmdSendFormOprihod } from './concreteCommands/CmdSendFormOprihod';
 
 export const dom = (() => {
 
@@ -40,6 +42,110 @@ export const dom = (() => {
             cnt!.appendChild(a);
         });
     }
+
+
+    /**
+     * Наполнить выпадающий список. Данные получить
+     * от мойсклад / db
+     * @param select -- (#sel-pathName) объект выпадающего списка
+     * @param listdata -- список значений для заполнения. 
+     *                 Первый из списка пустой/не пустой (emptyFirst: boolean).
+     */
+    async function fillSelectPahtNamesOprihod(select: HTMLElement, listdata: string[], emptyFirst: boolean = true) {
+        const listd = [...listdata];
+        if (emptyFirst)
+            listd.unshift('---');
+        listd.forEach((v, i) => {
+            const option = document.createElement('option');
+            option.setAttribute('id', `${select.id}_${i}`);
+            option.setAttribute('value', v);
+            option.textContent = v;
+            select?.appendChild(option);
+        });
+    }
+
+
+    function setCallbackSelect(select: HTMLElement, callb: (this: HTMLElement, ev: Event) => any) {
+        select.addEventListener('change', callb);
+    }
+
+    function delCallbackSelect(select: HTMLElement, callb: (this: HTMLElement, ev: Event) => any) {
+        select.removeEventListener('change', callb);
+    }
+
+    const cmdSendDataFormOprihod = new CmdSendFormOprihod(appcn);
+
+    /**
+     * Отправка формы с данными оприходывания
+     * @param e 
+     */
+    async function clbSendFormOprihod(e: Event) {
+        e.preventDefault();
+        const form = (<HTMLFormElement> e.target).form as HTMLFormElement;
+        const names = ["sellist-pathName", "sellist-name", "sellist-color", "sellist-count", "sellist-photo"];
+        const fdata = new FormData();
+        let i = 0; 
+        // debugger;
+        for (let el of form) {
+            if (i > 4) break;
+            const name = names[i].split('-')[1];
+            if (el instanceof HTMLSelectElement) {
+                const opts = el.childNodes as NodeListOf<HTMLOptionElement>;
+                let value = '';
+                for (let v of opts) {
+                    if (v instanceof HTMLOptionElement && v.selected) {
+                        value = v.value;
+                        break;
+                    }
+                }
+                fdata.append(name, value);
+            } else if (el instanceof HTMLInputElement) {
+                if (el.type === 'file') {
+                    const fls = el.files;
+                    if (fls) {
+                        for (let f of fls) {
+                            fdata.append('file', f);
+                        }
+                    }
+                } else {
+                    const value = el.value;
+                    fdata.append(name, value);
+                }
+            }
+            i += 1;
+        }
+        invoker.setSendFormOprihod(cmdSendDataFormOprihod);
+        const result = await invoker.sendDataFormOprihod<FormData>(fdata);
+        console.log('clb send form: \n', result);
+        // for (let [k, v] of fdata.entries()) {console.log(k, v)}
+    }
+
+    const commandGetAttrColorName = new GetAttributesByPathName(appcn); // команда получить цвет, имя по namePath
+    
+    /**
+     * Коллбек по выбору элемента списка "Категории" 
+     * @param e Event
+     */
+    async function clbSelPathName(e: Event) {
+        const opts = (<HTMLElement> e.target).childNodes as NodeListOf<HTMLOptionElement>;
+        invoker.setGetAttrsColorName(commandGetAttrColorName);
+        for (let el of opts) {
+            if (el instanceof HTMLOptionElement && el.selected) {
+                const clientColor = new FillSelectColor('sel-color');
+                const clientName = new FillSelectName('sel-name');
+                const result = await invoker.getAttrsColorName(el.value);
+                const resultHolderColor = new ResultHolder(clientColor);
+                const resultHolderName = new ResultHolder(clientName);
+                const hldColor = new Holder(result.pathName, result.colors);
+                const hldName = new Holder(result.pathName, result.names);
+                await resultHolderColor.execute(hldColor);
+                await resultHolderName.execute(hldName);
+                
+                break;       
+            }
+        }
+    } 
+
 
     /**
      * Создать и вернуть контейнерный Html элемент
@@ -89,6 +195,14 @@ export const dom = (() => {
         return table;
     }
 
-    const publicApi = { createListCats, createContainer, makeTable };
+    const publicApi = { 
+        createListCats, createContainer, 
+        makeTable, fillSelectPahtNamesOprihod,
+        setCallbackSelect, delCallbackSelect, 
+        clbSelPathName, clbSendFormOprihod,
+
+    };
+
+
     return publicApi;
 })();

@@ -3,6 +3,7 @@
 const DEVHOST = '/';
 const HOST = DEVHOST;
 
+
 export class AppConnect {
 
     host = '/';
@@ -29,6 +30,29 @@ export class AppConnect {
               'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify(requestData)
+        });
+        const result = await resp.json();
+        return result;
+    }
+
+    async getRespSendFormDataOprihod(formData: FormData) {
+        const response = await fetch(this.host + 'formOprihod', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        return result;
+    }
+
+
+    async getAttributesNameColorsByPathName(pathName: string) {
+        const reqData = {pathName: pathName};
+        const resp = await fetch(this.host + 'getAttrsByPath', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(reqData)
         });
         const result = await resp.json();
         return result;

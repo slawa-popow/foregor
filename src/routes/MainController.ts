@@ -49,6 +49,16 @@ class MainController {
 
     /**
      * 
+     * Форма оприходования для записи в таблицу бд.
+     */
+    async formDataOprihod(request: Request, response: Response) {
+        const data = request.body;
+        return response.status(200).json(data);
+    }
+
+
+    /**
+     * 
      * Получить атрибуты (имя, цвет) по присланному uri pathName мойсклад
      */
     async getAttrsByPath(request: Request, response: Response) {
@@ -60,7 +70,7 @@ class MainController {
         const bodydata = request.body.pathName;
         const findResult = await db.getAttributesByPathName(bodydata);
         if (findResult) 
-            return response.status(200).json(findResult);
+            return response.status(200).json([findResult]);
         return response.status(404).json({ errors: ["not found"] });
     }
 
