@@ -4,9 +4,12 @@ import { appcn } from './AppConnect';
 import { MinimizeResponseListProds, TypeInputOprihod } from './types/TypesFrontend';
 import { GetAllProductFolder } from './concreteCommands/GetAllProductFolder';
 import { Holder, ResultHolder } from './ResultHolder.ts/ResultHolder';
-import { ClientData, FillSelectColor, FillSelectName} from './page/clients';
+import { ClientData, FillSelectColor, FillSelectName, } from './page/clients';
 import { GetAttributesByPathName } from './concreteCommands/GetAttributesByPathName';
 import { CmdSendFormOprihod } from './concreteCommands/CmdSendFormOprihod';
+import { clientTableOptihod } from '..';
+import { CmdDeleteRowTableOprihod } from './concreteCommands/CmdDeleteRowTableOprihod';
+
 
 export const dom = (() => {
 
@@ -86,7 +89,7 @@ export const dom = (() => {
         const names = ["sellist-pathName", "sellist-name", "sellist-color", "sellist-count", "sellist-photo"];
         const fdata = new FormData();
         let i = 0; 
-        // debugger;
+         
         for (let el of form) {
             if (i > 4) break;
             const name = names[i].split('-')[1];
@@ -107,6 +110,7 @@ export const dom = (() => {
                         for (let f of fls) {
                             fdata.append('file', f);
                         }
+                         
                     }
                 } else {
                     const value = el.value;
@@ -124,15 +128,28 @@ export const dom = (() => {
         textMessage('errinfo', 'Отправка данных...');   
         invoker.setSendFormOprihod(cmdSendDataFormOprihod);
         
-        const result = await invoker.sendDataFormOprihod<FormData>(fdata);
-        loadImage(false);
-        textMessage('errinfo');
-        console.log('clb send form: \n', result);
+        const result = await invoker.sendDataFormOprihod<TypeInputOprihod>(fdata);
+        if (Array.isArray(result) && result.length === 1 && result[0].errors) {
+            const msgarr = result[0].errors.map(v => {return v.message}).join('; ');
+            
+            loadImage(false);
+            textMessage('errinfo', 'пустое поле "количество"; ' + msgarr);
+        } else {
+            loadImage(false);
+            textMessage('errinfo');
+             
+            const holderTableOprh = new ResultHolder(clientTableOptihod);
+            const holderTO = new Holder('holderFirstStart', result);
+            await holderTableOprh.execute(holderTO);
+        }
+        const infile = document.getElementById('sel-photo') as HTMLInputElement;
+        infile.value = '';
+         
         // for (let [k, v] of fdata.entries()) {console.log(k, v)}
     }
 
     const commandGetAttrColorName = new GetAttributesByPathName(appcn); // команда получить цвет, имя по namePath
-    
+    const commandDelRow = new CmdDeleteRowTableOprihod(appcn);
     /**
      * Коллбек по выбору элемента списка "Категории" 
      * @param e Event
@@ -173,12 +190,12 @@ export const dom = (() => {
      */
     async function makeOprihodTable<T>(arrData: T[]): Promise<HTMLTableElement> {
         const table = document.createElement('table');
-        table.classList.add('table', 'table-striped', 'table-sm', 'custom-style-table');
+        table.classList.add('table', 'table-striped', 'table-bordered', 'table-sm', 'custom-style-table');
         // ---------- шея -----------------------------------
         const thead = document.createElement('thead');
         thead.classList.add('thead-light');
         const tr = document.createElement('tr'); //(name, color, count, pathName, date, time, photoPath)
-        const titleTable = ['id', 'название', 'цвет', 'кол-во', 'из категории', 'дата', 'время', 'удалить'];
+        const titleTable = ['id', 'название', 'цвет', 'кол-во', 'из категории', 'дата', 'время', ''];
         titleTable.forEach((v) => {
             const th = document.createElement('th');
             th.textContent = v;
@@ -199,6 +216,18 @@ export const dom = (() => {
         arrData.forEach((val) => {
             const data = val as TypeInputOprihod;
             const tr = document.createElement('tr');
+            tr.addEventListener('click', async (e) => {
+                const elem = e.target;
+                if (elem instanceof HTMLAnchorElement) {
+                    const rowId = elem.id.split('_')[1];
+                    invoker.setCmdDeleteRow(commandDelRow);
+                     
+                    const resDel = await invoker.sendDeleteRowById<TypeInputOprihod>(rowId);
+                    const delHolder = new Holder('delH'+rowId, resDel);
+                    const resDelHolder = new ResultHolder(clientTableOptihod);
+                    await resDelHolder.execute(delHolder);
+                }   
+            });
 
             for (let cellName of [data.id, data.name || '', data.color || '', data.count || '', 
                 lastValPathName(data.pathName), data.date || '', data.time || '', ]) {
@@ -207,15 +236,19 @@ export const dom = (() => {
                     tr.appendChild(td);
             }
             const a = document.createElement('A') as HTMLAnchorElement;
-            a.classList.add('list-group-item', 'list-group-item-action', 'list-group-item-success');
+            a.setAttribute('id', `delrow_${data.id}`);
+            a.classList.add('list-group-item', 'list-group-item-action', 'list-group-item-danger');
             a.textContent = 'удалить';
-
+            tr.appendChild(a);
             tbody.appendChild(tr);
         });
         table.appendChild(tbody);
 
         return table;
     }
+
+
+    
 
 
     /**

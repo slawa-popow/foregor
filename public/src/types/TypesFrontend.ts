@@ -20,4 +20,5 @@ export interface TypeInputOprihod {
     id ?: string | number;
     isPhoto ?: boolean;
     photoPath ?: string;
+    errors ?: Array<{message: string, field: string}>;
 }

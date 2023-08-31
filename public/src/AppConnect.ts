@@ -44,6 +44,7 @@ export class AppConnect {
             body: formData
         });
         const result = await response.json();
+        
         return result;
     }
 
@@ -55,6 +56,19 @@ export class AppConnect {
                 'Content-Type': 'application/json;charset=utf-8'
               },
               body: JSON.stringify({})
+        });
+        const result = await response.json();
+        return result;
+    }
+
+
+    async deleteRow<T>(idrow: string): Promise<T> {
+        const response = await fetch(this.host + 'deleteRow', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              body: JSON.stringify({delId: idrow})
         });
         const result = await response.json();
         return result;

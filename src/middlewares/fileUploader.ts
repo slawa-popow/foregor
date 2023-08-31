@@ -12,7 +12,7 @@ dotenv.config();
  * @param path путь к папке (директории)
  * @returns { boolean }
  */
-function isDir(path: string): boolean {
+function isDir(path: string): boolean { 
     try {
         const stat = fs.lstatSync(path);
         return stat.isDirectory();
@@ -76,5 +76,5 @@ const storage = multer.diskStorage({
     }
 }
 
-  // file - name input html формы
+  // file - type input html формы
 export const fileUploader = multer({ storage: storage, fileFilter: fileFilterMiddleware }).single('file'); 

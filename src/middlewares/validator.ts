@@ -30,3 +30,9 @@ export const countFormOprihodValid = () => {
             .trim().isLength({min: 0, max: 6}).withMessage('не корректная длина значения');
 };
 
+
+export const deleteRowValid = () => {
+    return body('delId').exists().withMessage('поле должно существовать')
+           .trim().isLength({min: 1, max: 56}).withMessage('не корректная длина значения');
+};
+

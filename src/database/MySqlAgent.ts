@@ -117,6 +117,30 @@ class MySqlAgent {
         return [];
     }
 
+
+    /**
+     * Удалить строку из таблицы оприходования по айди,
+     * вернуть таблицу.
+     * @param rowId id строки которую удалить
+     * @returns таблица оприходования
+     */
+    async delRowById(rowId: string): Promise<TypeInputFormOprihod[]> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                await connection.query(`DELETE FROM ${Table.OneOprihod} WHERE id=${rowId};`);
+                const res = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod); 
+                return res;
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->getAllDataTable()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
+    }
+
+
     /**
      * Добавить один продукт в таблицу и вернуть всю таблицу
      * @param prodData - данные для записи

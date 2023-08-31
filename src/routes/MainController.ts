@@ -63,7 +63,7 @@ class MainController {
         const errors = myValidationResult(request);
          
         if (!errors.isEmpty()) {
-            return response.status(400).json( { errors: errors.array({onlyFirstError: true}) } );
+            return response.status(400).json( [{ errors: errors.array({onlyFirstError: true}) }] );
         } 
         const bdata = request.body;
         const indata: TypeInputFormOprihod = bdata;
@@ -74,9 +74,27 @@ class MainController {
     }
 
 
+    /**
+     * Отдать таблицу оприходований 
+     */
     async getTableOprihod(_request: Request, response: Response) {
         const table = await db.getAllDataTable(Table.OneOprihod);
         response.status(200).json(table);
+    }
+
+
+    /**
+     * {delId: idrow}
+     */
+    async deleteRow(request: Request, response: Response) {
+        const errors = myValidationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json( { errors: errors.array({onlyFirstError: true}) } );
+        } 
+        const rowId = request.body.delId;
+         
+        const resultDel = await db.delRowById(rowId);
+        return response.status(200).json(resultDel);
     }
 
 

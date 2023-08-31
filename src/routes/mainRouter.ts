@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { mainController } from "./MainController";
-import { colorNameFormOprihodValid, countFormOprihodValid, uriSkladValid, validInputDataToGetAttributes } from "../middlewares/validator";
+import { colorNameFormOprihodValid, countFormOprihodValid, deleteRowValid, uriSkladValid, validInputDataToGetAttributes } from "../middlewares/validator";
 import { fileUploader } from "../middlewares/fileUploader";
 
 
@@ -8,6 +8,7 @@ const mainRouter = Router();
 
 mainRouter.get('/',  mainController.getIndexPage);
 mainRouter.post('/getTableOprihod', mainController.getTableOprihod);
+mainRouter.post('/deleteRow', deleteRowValid(), mainController.deleteRow);
 mainRouter.post('/allProdFolder', mainController.getAllProdFolder);
 mainRouter.post('/getProductByCats', uriSkladValid(), mainController.getProductByCats);
 mainRouter.post('/getUniqPathes', mainController.getUniqPathes);

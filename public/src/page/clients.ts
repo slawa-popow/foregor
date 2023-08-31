@@ -60,7 +60,7 @@ export class TableProducts extends ClientData implements Clearable {
 /**
  * Создает таблицу оприходования
  */
-export class TableOprihod extends ClientData implements Clearable {
+export class AllDataTableOprihod extends ClientData implements Clearable {
     
     constructor (id: string) {
         super(id);

@@ -11,7 +11,8 @@ export class Invoker {
     private productByCats: BaseCommand | null = null;       // список товаров определенной категории (раздела МойСклад)
     private colorNameByCategory: BaseCommand | null = null; // атрибуты цветов и названий по выбранной (select html) категории
     private sendFormOprihod: BaseCommand | null = null;     // отправить форму для добавления товара в таблицу 
-
+    private getDataTableOprihod: BaseCommand | null = null; // получить таблицу добавленных продуктов для оприходования
+    private deleteRowFromTable: BaseCommand | null = null;  // удалить строку из таблицы оприходований
 
      /**
      * -----------------------------------------------------------------------
@@ -23,8 +24,38 @@ export class Invoker {
             this.sendFormOprihod = command;
     }
 
-    async sendDataFormOprihod<T>(formData: any): Promise<T[]> {
+    async sendDataFormOprihod<T>(formData: FormData): Promise<T[]> {
         const result = (this.sendFormOprihod) ? await this.sendFormOprihod.execute<T>(formData) : null;
+        return (result) ? result : [];
+    }
+
+
+     /**
+     * -----------------------------------------------------------------------
+     * @param command удалить строку из таблицы оприходований
+     */
+     setCmdDeleteRow(command: BaseCommand) {
+        if (command)
+            this.deleteRowFromTable = command;
+    }
+
+    async sendDeleteRowById<T>(rowId: string): Promise<T[]> {
+        const result = (this.deleteRowFromTable) ? await this.deleteRowFromTable.execute<T>(rowId) : null;
+        return (result) ? result : [];
+    }
+
+
+     /**
+     * -----------------------------------------------------------------------
+     * @param command получить таблицу добавленных продуктов для оприходования
+     */
+     setGetAllDataTableOprihod(command: BaseCommand) {
+        if (command)
+            this.getDataTableOprihod = command;
+    }
+
+    async getAllDataTableOprihod<T>(): Promise<T[]> {
+        const result = (this.getDataTableOprihod) ? await this.getDataTableOprihod.execute<T>() : null;
         return (result) ? result : [];
     }
 
