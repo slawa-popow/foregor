@@ -18,3 +18,15 @@ export const validInputDataToGetAttributes = () => {
            .matches(/^[0-9А-Яа-яA-Za-zЁё\s-_.,:/]+$/).withMessage('не корректное значение pathName');
 };
 
+export const colorNameFormOprihodValid = (value: string) => {
+    return body(value).exists().notEmpty().withMessage(`пустое значение ${value}`)
+            .isString().withMessage('Не верный тип данных')
+            .trim().isLength({min: 1, max: 16}).withMessage('не корректная длина значения');
+};
+
+export const countFormOprihodValid = () => {
+    return body('count').exists().withMessage('поле должно существовать')
+            .isNumeric().withMessage('должно быть только число')
+            .trim().isLength({min: 0, max: 6}).withMessage('не корректная длина значения');
+};
+

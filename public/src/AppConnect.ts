@@ -1,3 +1,4 @@
+import { TypeInputOprihod } from "./types/TypesFrontend";
 
 
 const DEVHOST = '/';
@@ -22,6 +23,7 @@ export class AppConnect {
         return await resp.json();
     }
 
+    // получить товары по pathName
     async getProductByCats(url: string, uri: string) {
         const requestData = {URISklad: uri};
         const resp = await fetch(url, {
@@ -35,6 +37,7 @@ export class AppConnect {
         return result;
     }
 
+    // отправить форму оприход
     async getRespSendFormDataOprihod(formData: FormData) {
         const response = await fetch(this.host + 'formOprihod', {
             method: 'POST',
@@ -44,7 +47,21 @@ export class AppConnect {
         return result;
     }
 
+    // получить таблицу добавленных продуктов
+    async getTableOprihod(): Promise<TypeInputOprihod> {
+        const response = await fetch(this.host + 'getTableOprihod', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              body: JSON.stringify({})
+        });
+        const result = await response.json();
+        return result;
+    }
 
+
+    // получить списки цвет и название по pathName для select-ов
     async getAttributesNameColorsByPathName(pathName: string) {
         const reqData = {pathName: pathName};
         const resp = await fetch(this.host + 'getAttrsByPath', {

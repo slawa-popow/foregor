@@ -8,7 +8,6 @@ import cookieSession from 'cookie-session';
 import { engine } from 'express-handlebars';
 import { mainRouter } from './routes/mainRouter';
 
-
 dotenv.config();
 
 export const app = express();

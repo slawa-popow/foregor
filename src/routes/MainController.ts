@@ -1,15 +1,22 @@
 import { Request, Response } from 'express';
-import { db } from '../database/MySqlAgent';
+import { Table, db } from '../database/MySqlAgent';
 import { mySklad } from '../mysklad/MySklad';
 import { MinimizeResponseListProds, PathNamePlitochka, ProductsByPathCats, QueryProducts } from '../types/TypesMySklad';
 import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
+import { TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
+import { MRequest } from '../types/TypesApp';
 
 
 class MainController {
 
     async getIndexPage(_request: Request, response: Response) {
-        return response.status(200).render('index', {layout: 'main'}); 
+        return response.status(200).render('index', {
+            layout: 'main', 
+            data: {
+                currTime: new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"})
+            }
+        }); 
     }
 
 
@@ -50,16 +57,32 @@ class MainController {
     /**
      * 
      * Форма оприходования для записи в таблицу бд.
+     * Вернуть всю таблицу.
      */
-    async formDataOprihod(request: Request, response: Response) {
-        const data = request.body;
-        return response.status(200).json(data);
+    async formDataOprihod(request: MRequest, response: Response) {
+        const errors = myValidationResult(request);
+         
+        if (!errors.isEmpty()) {
+            return response.status(400).json( { errors: errors.array({onlyFirstError: true}) } );
+        } 
+        const bdata = request.body;
+        const indata: TypeInputFormOprihod = bdata;
+        indata.photoPath = request.photoPath;
+        const result = await db.addProductToTableOprihod(indata);
+
+        return response.status(200).json(result); 
+    }
+
+
+    async getTableOprihod(_request: Request, response: Response) {
+        const table = await db.getAllDataTable(Table.OneOprihod);
+        response.status(200).json(table);
     }
 
 
     /**
      * 
-     * Получить атрибуты (имя, цвет) по присланному uri pathName мойсклад
+     * Получить атрибуты (имя, цвет) по присланному uri pathName мойсклад 
      */
     async getAttrsByPath(request: Request, response: Response) {
         const errors = myValidationResult(request);

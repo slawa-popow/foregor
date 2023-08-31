@@ -1,7 +1,7 @@
 import { GetAllProdsByPathName } from './concreteCommands/GetAllProdsByPathName';
 import { Invoker, invoker} from './invoke/Invoker';
 import { appcn } from './AppConnect';
-import { MinimizeResponseListProds } from './types/TypesFrontend';
+import { MinimizeResponseListProds, TypeInputOprihod } from './types/TypesFrontend';
 import { GetAllProductFolder } from './concreteCommands/GetAllProductFolder';
 import { Holder, ResultHolder } from './ResultHolder.ts/ResultHolder';
 import { ClientData, FillSelectColor, FillSelectName} from './page/clients';
@@ -72,6 +72,7 @@ export const dom = (() => {
     function delCallbackSelect(select: HTMLElement, callb: (this: HTMLElement, ev: Event) => any) {
         select.removeEventListener('change', callb);
     }
+    
 
     const cmdSendDataFormOprihod = new CmdSendFormOprihod(appcn);
 
@@ -114,8 +115,18 @@ export const dom = (() => {
             }
             i += 1;
         }
+        const currDate = new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"});
+        const dt = currDate.split(',');
+        fdata.append('date', dt[0].trim());
+        fdata.append('time', dt[1].trim());
+
+        loadImage(true); 
+        textMessage('errinfo', 'Отправка данных...');   
         invoker.setSendFormOprihod(cmdSendDataFormOprihod);
+        
         const result = await invoker.sendDataFormOprihod<FormData>(fdata);
+        loadImage(false);
+        textMessage('errinfo');
         console.log('clb send form: \n', result);
         // for (let [k, v] of fdata.entries()) {console.log(k, v)}
     }
@@ -157,6 +168,55 @@ export const dom = (() => {
         return (cnt) ? cnt : null;
     }
 
+    /**
+     * Таблица оприходования
+     */
+    async function makeOprihodTable<T>(arrData: T[]): Promise<HTMLTableElement> {
+        const table = document.createElement('table');
+        table.classList.add('table', 'table-striped', 'table-sm', 'custom-style-table');
+        // ---------- шея -----------------------------------
+        const thead = document.createElement('thead');
+        thead.classList.add('thead-light');
+        const tr = document.createElement('tr'); //(name, color, count, pathName, date, time, photoPath)
+        const titleTable = ['id', 'название', 'цвет', 'кол-во', 'из категории', 'дата', 'время', 'удалить'];
+        titleTable.forEach((v) => {
+            const th = document.createElement('th');
+            th.textContent = v;
+            tr.appendChild(th)
+        });
+        thead.appendChild(tr);
+        table.appendChild(thead);
+        const lastValPathName = (pathName: string): string => {
+            try {
+               const spl = pathName.split('/');
+            const len = spl.length;
+            return '../' + spl.slice(len-1, len).join('/'); 
+            } catch (e) {}
+            return '';
+        }
+        // ---------- тело ----------------------------------
+        const tbody = document.createElement('tbody');
+        arrData.forEach((val) => {
+            const data = val as TypeInputOprihod;
+            const tr = document.createElement('tr');
+
+            for (let cellName of [data.id, data.name || '', data.color || '', data.count || '', 
+                lastValPathName(data.pathName), data.date || '', data.time || '', ]) {
+                    const td = document.createElement('td');
+                    td.textContent = ''+cellName;
+                    tr.appendChild(td);
+            }
+            const a = document.createElement('A') as HTMLAnchorElement;
+            a.classList.add('list-group-item', 'list-group-item-action', 'list-group-item-success');
+            a.textContent = 'удалить';
+
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+
+        return table;
+    }
+
 
     /**
      * Создать и вернуть таблицу данных
@@ -195,11 +255,36 @@ export const dom = (() => {
         return table;
     }
 
+    /**
+     * элементу с определенным id назначить текст
+     * @param text message
+     */
+    function textMessage(id: string, text: string = '') {
+        const textel = document.getElementById(id);
+        textel!.textContent = text;
+    }
+
+    /**
+     * включить/выключить картинку загрузки
+     * @param on 
+     */
+    function loadImage(on: boolean) {
+        const loadImg = document.getElementById('loadstate');
+        if (on) {
+            loadImg?.classList.remove('noloadstate');
+            loadImg?.classList.add('loadstate');
+        } else {
+            loadImg?.classList.remove('loadstate');
+            loadImg?.classList.add('noloadstate');
+        }
+    }
+
     const publicApi = { 
         createListCats, createContainer, 
         makeTable, fillSelectPahtNamesOprihod,
         setCallbackSelect, delCallbackSelect, 
         clbSelPathName, clbSendFormOprihod,
+        loadImage, textMessage, makeOprihodTable,
 
     };
 

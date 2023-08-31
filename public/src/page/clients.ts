@@ -58,6 +58,30 @@ export class TableProducts extends ClientData implements Clearable {
 
 
 /**
+ * Создает таблицу оприходования
+ */
+export class TableOprihod extends ClientData implements Clearable {
+    
+    constructor (id: string) {
+        super(id);
+    }
+
+    /**
+     * Callback. Создать таблицу. 
+     * @param holder результат вернувш. таблица
+     */
+    async executeCallback<T>(holder: Holder<T>) {
+        const arrdata = holder.data.arrData;
+        const table = await dom.makeOprihodTable<T>(arrdata);
+        this.clearContainer();
+        this.fillContainer(table);
+        // const who = document.getElementById('id-label-table-list-from');
+        // who!.textContent = holder.name + ` [всего: ${arrdata.length}]`;
+    }
+}
+
+
+/**
  * Наполняет html select "Категории" 
  */
 export class FillSelectPathNames extends ClientData implements Clearable {
@@ -122,6 +146,6 @@ export class FillSelectName extends ClientData implements Clearable {
             throw new Error("ERROR IN executeCallback<T>(holder) --> class FillSelectName ")
         }
     }
-
-
 }
+
+

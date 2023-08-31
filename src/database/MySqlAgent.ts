@@ -4,21 +4,24 @@ import { Pool } from "mysql2/promise";
  
 import dotenv from 'dotenv';
 import { AttributesByPathName, IReturnGetUniqPathes } from '../types/TypesDB';
+import { TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
+import { createTableOprihod } from './preparedSQL';
  
  
 dotenv.config();
 
-enum Table {
+export enum Table {
     Test='test',
     Products='products',
+    OneOprihod='one_oprihod',
 };
 
 class MySqlAgent {
 
-    private HOST: string = process.env.PHOST || '';
-    private USER: string = process.env.PUSER || '';
-    private DATABASE: string = process.env.PDATABASE || '';
-    private PASSWORD: string = process.env.PPASSWORD || '';
+    private HOST: string = process.env.HOST || '';
+    private USER: string = process.env.USER || '';
+    private DATABASE: string = process.env.DATABASE || '';
+    private PASSWORD: string = process.env.PASSWORD || '';
     private pool: Pool | null = null;
 
     constructor() {
@@ -77,6 +80,75 @@ class MySqlAgent {
 
 
     /**
+     * Создать таблицу, если такой не существует то все-равно создать
+     */
+    async createTableIfNotExist(tableName: string): Promise<boolean> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                await connection.query(createTableOprihod(tableName));
+                return true;
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->createTableIfNotExist()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return false;
+    }
+
+    /**
+     * Выборка всего из таблицы
+     */
+    async getAllDataTable<T>(tableName: string): Promise<T[]> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                await this.createTableIfNotExist(tableName);
+                const [_allData, _services] = await connection.query(`SELECT * FROM ${tableName};`);
+                const allData = _allData as T[];  
+                return allData;
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->getAllDataTable()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
+    }
+
+    /**
+     * Добавить один продукт в таблицу и вернуть всю таблицу
+     * @param prodData - данные для записи
+     * @returns - все из таблицы
+     */
+    async addProductToTableOprihod(prodData: TypeInputFormOprihod): Promise<TypeInputFormOprihod[]> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                await this.createTableIfNotExist(Table.OneOprihod);
+                const arrValues = [
+                    prodData.name, prodData.color, (prodData.count === '') ? 0:prodData.count, prodData.pathName,
+                    prodData.date, prodData.time, prodData.photoPath || ''
+                ];
+                await connection.query(`
+                    INSERT INTO ${Table.OneOprihod}
+                    (name, color, count, pathName, date, time, photoPath)
+                    VALUES(?, ?, ?, ?, ?, ?, ?)
+                `, arrValues); 
+                const allOprihod = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod);
+                return allOprihod;
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->addProductToTableOprihod()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
+    }
+
+
+    /**
      * Вернуть уникальные pathName
      */
     async getUniqPathes(): Promise<string[]> {
@@ -122,6 +194,8 @@ class MySqlAgent {
     }
     
 
+
+    //--------- test --------------------------------------
     async setTestData(data: Array<string>): Promise<any> { 
         const connection = await this.pool!.getConnection();
 

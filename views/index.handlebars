@@ -50,10 +50,11 @@
           </select>
 
           <label for="count-products">Количество:</label>
-          <input id="sel-count" type="text" class="form-control" id="count-products" name="sellist-count" >
+          <input id="sel-count" placeholder="Количество" type="number" class="form-control" id="count-products" name="sellist-count">
 
           <label for="sel-photo">Фото:</label>
           <input id="sel-photo" type="file" name="sellist-photo" accept="image/*" class="form-control-file border btn-sm">
+          <div id="statusinfo"><span id="errinfo" style="font-size: 0.8em;"></span><img id="loadstate" class="noloadstate" src="styles/load-img.gif" alt=""></div>
           <br>
        
         </div>
@@ -63,6 +64,29 @@
           </div>
         </form>
       </div>
+                        {{!-- таблица оприходования --}}
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm">
+            <p style="font-size: 1.1em; text-align: center; margin: 15px 0;">Таблица оприходования {{data.currTime}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1 ">
+            <div class="col d-flex justify-content-end"> <span id="oprihodinfo" style="font-size: 0.8em; padding-right: 10px;"></span><img id="loadoprihod" class="noloadstate" src="styles/load-img.gif" alt=""> </div>
+          </div>
+          <div class="col-sm-11 ">
+            <div class="col d-flex justify-content-end"><button id="input-oprihod" type="submit" class="btn btn-success">Оприходовать</button></div>
+          </div>
+
+          {{!-- таблица --}}
+          <div class="col-sm">
+            <div id="cnt-table-oprihod"></div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
                           {{!-- -------------- --}}
