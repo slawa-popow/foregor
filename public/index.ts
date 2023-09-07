@@ -8,6 +8,18 @@ import { dom } from "./src/dom";
 import { invoker } from "./src/invoke/Invoker";
 import { AllDataTableOprihod, AnswerOprihod, FillSelectPathNames, TableProducts } from "./src/page/clients";
 import { EnumPageName } from "./src/types/EnumPageName";
+import { TelegramWebApps } from 'telegram-webapps-types';
+
+
+declare const window: {
+    Telegram: TelegramWebApps.SDK;
+  } & Window;
+
+
+window.Telegram.WebApp.ready();
+window.Telegram.WebApp.expand();
+const initData = Telegram.WebApp.initData || '';
+appcn.sendTelegramData(initData);
 
 const datep = document.getElementById('currenttime');
 setInterval( () => {
@@ -51,7 +63,9 @@ const btnOprihod = document.getElementById('input-oprihod');
 btnOprihod?.addEventListener('click', async () => {
     dom.loadImage(true, 'loadoprihod');
     dom.textMessage('oprihodinfo', 'оприходование в МойСклад...');
-    const res = await invoker.sendOprihod({who: "admin", role: "admin"});
+    const isCheckSend = document.getElementById('issendsklad');
+    const ischeck = (<HTMLInputElement>isCheckSend).checked;
+    const res = await invoker.sendOprihod({who: "admin", role: "admin", isSendSklad: ischeck});
     const rHolder = new Holder('answerOprihod', res);
     answerResHolder.execute(rHolder);
     dom.loadImage(false, 'loadoprihod');

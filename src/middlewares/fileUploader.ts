@@ -6,8 +6,8 @@ import { MRequest } from "../types/TypesApp";
 
 dotenv.config();
 
-const MAX_SIZE_IMG = -3200;   // 3200
-const MAX_SIZE_VID = -42000;  // 42000
+const MAX_SIZE_IMG = 3200;   // 3200
+const MAX_SIZE_VID = 42000;  // 42000
 
 /**
  * Существует ли директория по пути path?

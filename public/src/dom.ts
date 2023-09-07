@@ -135,7 +135,7 @@ export const dom = (() => {
             const msgarr = result[0].errors.map(v => {return v.message}).join('; ');
             
             loadImage(false, 'loadstate');
-            textMessage('errinfo', 'пустое поле "количество"; ' + msgarr);
+            textMessage('errinfo', msgarr);
         } else {
             loadImage(false, 'loadstate');
             textMessage('errinfo');

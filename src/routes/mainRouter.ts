@@ -13,6 +13,7 @@ mainRouter.post('/getTableOprihod', mainController.getTableOprihod);
 mainRouter.post('/deleteRow', deleteRowValid(), mainController.deleteRow);
     // добавить потом фильтр авторизации
 mainRouter.post('/doOprihod', mainController.doOprihod);
+mainRouter.post('/fromTelegram', mainController.fromTelegram);
 mainRouter.post('/allProdFolder', mainController.getAllProdFolder);
 mainRouter.post('/getProductByCats', uriSkladValid(), mainController.getProductByCats);
 mainRouter.post('/getUniqPathes', mainController.getUniqPathes);

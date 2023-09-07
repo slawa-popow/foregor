@@ -41,10 +41,34 @@ export const createTableProduct = (tableName: string, _dbName: string = ''): str
 };
 
 
+export const createTableAllOprihod = (tableName: string = 'oprihod'): string => {
+    return `
+    
+    CREATE TABLE IF NOT EXISTS ${tableName} (
+        id INT(11) NOT NULL AUTO_INCREMENT,
+        products_id INT(11) NULL DEFAULT NULL,
+        date_oprihod VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        name VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        color VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        article VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        count INT(11) NOT NULL DEFAULT '0',
+        pathName VARCHAR(250) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        date VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        time VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        photoPath VARCHAR(200) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        PRIMARY KEY (id) USING BTREE
+    )
+    COMMENT='Таблица всех оприходований'
+    COLLATE='utf8mb4_general_ci'
+    ENGINE=InnoDB ;
+    `;
+};
+
+
 export const createTableOprihod = (tableName: string): string => { 
    return `CREATE TABLE IF NOT EXISTS ${tableName} (
 	id INT(11) NOT NULL AUTO_INCREMENT,
-    products_id INT(11) NOT NULL,
+    products_id  INT(11) NULL DEFAULT NULL,
 	name VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	color VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
     article VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
@@ -61,5 +85,20 @@ export const createTableOprihod = (tableName: string): string => {
     COLLATE='utf8mb4_general_ci'
     ENGINE=InnoDB; `;
 }
+
+
+export const createTableAdmins = (tableName: string = 'admins'): string => {
+    return `
+    CREATE TABLE ${tableName} (
+        id INT(11) NOT NULL AUTO_INCREMENT,
+        name VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        telegram_id VARCHAR(150) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+        PRIMARY KEY (id) USING BTREE
+    )
+    COMMENT='Администраторы'
+    COLLATE='utf8mb4_general_ci'
+    ENGINE=InnoDB ;
+    `;
+};
 
  

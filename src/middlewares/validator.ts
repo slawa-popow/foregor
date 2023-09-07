@@ -31,7 +31,7 @@ export const colorNameFormOprihodValid = (value: string) => {
 
 export const countFormOprihodValid = () => {
     return body('count').exists().withMessage('поле должно существовать')
-            .isNumeric().withMessage('должно быть только число')
+            .isNumeric().withMessage('в поле Количество должно быть только число')
             .trim().isLength({min: 0, max: 6}).withMessage('не корректная длина значения');
 };
 

@@ -29,6 +29,10 @@ const dom_1 = __webpack_require__(/*! ./src/dom */ "./public/src/dom.ts");
 const Invoker_1 = __webpack_require__(/*! ./src/invoke/Invoker */ "./public/src/invoke/Invoker.ts");
 const clients_1 = __webpack_require__(/*! ./src/page/clients */ "./public/src/page/clients.ts");
 const EnumPageName_1 = __webpack_require__(/*! ./src/types/EnumPageName */ "./public/src/types/EnumPageName.ts");
+window.Telegram.WebApp.ready();
+window.Telegram.WebApp.expand();
+const initData = Telegram.WebApp.initData || '';
+AppConnect_1.appcn.sendTelegramData(initData);
 const datep = document.getElementById('currenttime');
 setInterval(() => {
     if (datep)
@@ -63,7 +67,9 @@ const btnOprihod = document.getElementById('input-oprihod');
 btnOprihod === null || btnOprihod === void 0 ? void 0 : btnOprihod.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     dom_1.dom.loadImage(true, 'loadoprihod');
     dom_1.dom.textMessage('oprihodinfo', 'оприходование в МойСклад...');
-    const res = yield Invoker_1.invoker.sendOprihod({ who: "admin", role: "admin" });
+    const isCheckSend = document.getElementById('issendsklad');
+    const ischeck = isCheckSend.checked;
+    const res = yield Invoker_1.invoker.sendOprihod({ who: "admin", role: "admin", isSendSklad: ischeck });
     const rHolder = new ResultHolder_1.Holder('answerOprihod', res);
     answerResHolder.execute(rHolder);
     dom_1.dom.loadImage(false, 'loadoprihod');
@@ -222,6 +228,20 @@ class AppConnect {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
                 body: JSON.stringify(reqData)
+            });
+            const result = yield resp.json();
+            return result;
+        });
+    }
+    // отправка на сервер данных от телеграм /////тест
+    sendTelegramData(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const resp = yield fetch(this.host + 'fromTelegram', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
             });
             const result = yield resp.json();
             return result;
@@ -731,7 +751,7 @@ exports.dom = (() => {
             if (Array.isArray(result) && result.length === 1 && result[0].errors) {
                 const msgarr = result[0].errors.map(v => { return v.message; }).join('; ');
                 loadImage(false, 'loadstate');
-                textMessage('errinfo', 'пустое поле "количество"; ' + msgarr);
+                textMessage('errinfo', msgarr);
             }
             else {
                 loadImage(false, 'loadstate');

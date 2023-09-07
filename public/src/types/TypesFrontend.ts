@@ -29,4 +29,5 @@ export interface TypeInputOprihod {
 export interface DoOprihod {
     who: string;
     role: string;
+    isSendSklad: boolean;
 }

@@ -32,6 +32,7 @@
 .custom-style-table {
   margin-top: 25px;
   font-size: 0.7em;
+  overflow: scroll;
 }
 
 .bckg-row {

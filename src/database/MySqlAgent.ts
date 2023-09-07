@@ -5,7 +5,7 @@ import { Pool } from "mysql2/promise";
 import dotenv from 'dotenv';
 import { AttributesByPathName, IReturnGetUniqPathes } from '../types/TypesDB';
 import { TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
-import { createTableOprihod } from './preparedSQL';
+import { createTableAllOprihod, createTableOprihod } from './preparedSQL';
 import { mySklad } from '../mysklad/MySklad';
 import { TypeJoinOprihod } from '../types/TypesMySklad';
 
@@ -17,6 +17,7 @@ export enum Table {
     Test='test',
     Products='products',
     OneOprihod='one_oprihod',
+    Oprihod='oprihod',
 };
 
 class MySqlAgent {
@@ -27,7 +28,7 @@ class MySqlAgent {
     private PASSWORD: string = process.env.PPASSWORD || '';
     private pool: Pool | null = null;
 
-    constructor() {
+    constructor() { 
         this.setPool()
     }
 
@@ -144,23 +145,51 @@ class MySqlAgent {
     }
 
     /**
-     * Оприходовать таблицу в МойСклад
+     * Оприходовать таблицу 
      */
-    async doOprihod() {
+    async doOprihod(isCheck: boolean) {
         const connection = await this.pool!.getConnection();
         try {
             if (connection) {
-                
-                const [_arrIds, _serv] = await connection.query(`
-                    SELECT ${Table.Products}.pid, ${Table.OneOprihod}.name, ${Table.OneOprihod}.color, ${Table.OneOprihod}.article, ${Table.OneOprihod}.count
-                    FROM
-                    ${Table.OneOprihod} INNER JOIN ${Table.Products}
-                    ON ${Table.OneOprihod}.products_id=${Table.Products}.id;
-                `);
-                const arrIds = _arrIds as TypeJoinOprihod[];
-                const mysklResult =  await mySklad.oprihod(arrIds);
-                
-                return [mysklResult];
+                if (isCheck) {
+                    const [_arrIds, _serv] = await connection.query(`
+                        SELECT ${Table.Products}.pid, ${Table.OneOprihod}.name, ${Table.OneOprihod}.color, ${Table.OneOprihod}.article, ${Table.OneOprihod}.count
+                        FROM
+                        ${Table.OneOprihod} INNER JOIN ${Table.Products}
+                        ON ${Table.OneOprihod}.products_id=${Table.Products}.id;
+                    `);
+                    const arrIds = _arrIds as TypeJoinOprihod[];
+                    const mysklResult =  await mySklad.oprihod(arrIds);
+                    
+                    return [mysklResult];
+                } else {
+                    const table = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod);
+                    const todayDate = new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"});
+                    await connection.query(createTableAllOprihod(Table.Oprihod));   // если не сущ.
+
+                    if (table.length > 0) {
+                        for (let d of table) {
+                            const barr = [
+                                d.products_id || '',
+                                todayDate || '',
+                                d.name || '',
+                                d.color || '',
+                                d.article || '',
+                                d.count || 0,
+                                d.pathName || '',
+                                d.date || '',
+                                d.time || '',
+                                d.photoPath || ''
+                            ] ;
+                            await connection.query(`
+                            INSERT INTO ${Table.Oprihod}(products_id, date_oprihod, name, color, article, count, pathName, date, time, photoPath)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            `, barr);
+                        }
+                    }
+                    
+
+                }
             }
 
         } catch (e) { console.log('Error in MySqlAgent->doOprihod()->catch', e) } 

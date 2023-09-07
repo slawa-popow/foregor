@@ -4,7 +4,7 @@ import { mySklad } from '../mysklad/MySklad';
 import { MinimizeResponseListProds, PathNamePlitochka, ProductsByPathCats, QueryProducts } from '../types/TypesMySklad';
 import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
-import { TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
+import { DoOprihod, TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
 import { MRequest } from '../types/TypesApp';
 
 
@@ -17,6 +17,14 @@ class MainController {
                 currTime: new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"})
             }
         }); 
+    }
+
+
+    // получить данные телеграм
+    async fromTelegram(request: Request, response: Response) {
+        const teleData = request.body;
+        console.log('teledata: ', teleData);
+        response.status(200).json(teleData);
     }
 
 
@@ -87,13 +95,13 @@ class MainController {
      * Оприходовать
      */
     async doOprihod(request: Request, response: Response) {
-        const data = request.body;
-        if (data) {
+        const indata: DoOprihod = request.body;
+        console.log(indata)
+        if (!indata) {
             return response.status(400).json([]);
         }
-         
-        const resultOprihod = await db.doOprihod();
-        return response.status(200).json([data, resultOprihod]);
+        const resultOprihod = await db.doOprihod(indata.isSendSklad);
+        return response.status(200).json([indata, resultOprihod]);
     }
 
 

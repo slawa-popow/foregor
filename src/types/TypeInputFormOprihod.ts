@@ -13,3 +13,10 @@ export interface TypeInputFormOprihod {
     photoPath ?: string;
     products_id ?: number;
 }
+
+// команда оприходовать. Отправить с запросом кто, его роль в системе...
+export interface DoOprihod {
+    who: string;
+    role: string;
+    isSendSklad: boolean;   // чекбокс отправить оприходования в склад
+}
