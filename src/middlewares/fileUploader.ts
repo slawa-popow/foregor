@@ -6,6 +6,9 @@ import { MRequest } from "../types/TypesApp";
 
 dotenv.config();
 
+const MAX_SIZE_IMG = -3200;   // 3200
+const MAX_SIZE_VID = -42000;  // 42000
+
 /**
  * Существует ли директория по пути path?
  * (multer не создает если не существует)
@@ -65,11 +68,11 @@ const storage = multer.diskStorage({
 
     if ((file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/gif" ||
          file.mimetype === "image/jpeg" || file.mimetype === "application/octet-stream") 
-         && (fileSize > 0 && fileSize <= 3200) ) {
+         && (fileSize > 0 && fileSize <= MAX_SIZE_IMG) ) {
 
         cb(null, true);
 
-    } else if (file.mimetype === "video/mp4" && (fileSize > 0 && fileSize <= 42000) ) {
+    } else if (file.mimetype === "video/mp4" && (fileSize > 0 && fileSize <= MAX_SIZE_VID) ) {
         cb(null, true)
     } else {
         cb(null, false)
