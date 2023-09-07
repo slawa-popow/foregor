@@ -154,7 +154,7 @@ export const dom = (() => {
     const commandDelRow = new CmdDeleteRowTableOprihod(appcn);
     /**
      * Коллбек по выбору элемента списка "Категории" 
-     * @param e Event
+     * @param e Event 
      */
     async function clbSelPathName(e: Event) {
         const opts = (<HTMLElement> e.target).childNodes as NodeListOf<HTMLOptionElement>;

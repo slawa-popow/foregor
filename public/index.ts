@@ -19,7 +19,7 @@ declare const window: {
 window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
 const initData = Telegram.WebApp.initData || '';
-appcn.sendTelegramData(initData);
+appcn.sendTelegramData(initData); 
 
 const datep = document.getElementById('currenttime');
 setInterval( () => {
