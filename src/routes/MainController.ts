@@ -88,6 +88,10 @@ class MainController {
      */
     async doOprihod(request: Request, response: Response) {
         const data = request.body;
+        if (data) {
+            return response.status(400).json([]);
+        }
+         
         const resultOprihod = await db.doOprihod();
         return response.status(200).json([data, resultOprihod]);
     }
