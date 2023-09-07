@@ -15,11 +15,9 @@ declare const window: {
     Telegram: TelegramWebApps.SDK;
   } & Window;
 
+  window.Telegram.WebApp.ready();
+  window.Telegram.WebApp.expand();
 
-window.Telegram.WebApp.ready();
-window.Telegram.WebApp.expand();
-const initData = Telegram.WebApp.initData || '';
-appcn.sendTelegramData(initData); 
 
 const datep = document.getElementById('currenttime');
 setInterval( () => {
@@ -112,4 +110,6 @@ if (cntOprihod && cntAllprd)
 
 firstStart();
 
+const initData = Telegram.WebApp.initDataUnsafe || {};
+appcn.sendTelegramData(initData); 
  

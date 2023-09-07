@@ -31,8 +31,6 @@ const clients_1 = __webpack_require__(/*! ./src/page/clients */ "./public/src/pa
 const EnumPageName_1 = __webpack_require__(/*! ./src/types/EnumPageName */ "./public/src/types/EnumPageName.ts");
 window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
-const initData = Telegram.WebApp.initData || '';
-AppConnect_1.appcn.sendTelegramData(initData);
 const datep = document.getElementById('currenttime');
 setInterval(() => {
     if (datep)
@@ -109,6 +107,8 @@ if (cntOprihod && cntAllprd)
         }));
     }
 firstStart();
+const initData = Telegram.WebApp.initDataUnsafe || {};
+AppConnect_1.appcn.sendTelegramData(initData);
 
 
 /***/ }),
@@ -241,7 +241,7 @@ class AppConnect {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify([data])
+                body: JSON.stringify(data)
             });
             const result = yield resp.json();
             return result;

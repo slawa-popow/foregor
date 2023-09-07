@@ -1,3 +1,4 @@
+import { TelegramWebApps } from "telegram-webapps-types";
 import { DoOprihod, TypeInputOprihod } from "./types/TypesFrontend";
 
 const DEVHOST = 'https://foregor.vercel.app/';
@@ -105,13 +106,13 @@ export class AppConnect {
     }
 
     // отправка на сервер данных от телеграм /////тест
-    async sendTelegramData(data: string) {
+    async sendTelegramData(data: TelegramWebApps.WebAppInitData) {
         const resp = await fetch(this.host + 'fromTelegram', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify([data])
+            body: JSON.stringify(data)
         });
         const result = await resp.json();
         return result;

@@ -7,7 +7,7 @@ dotenv.config();
 
 class MySklad {
 
-    private token: string = process.env.MOISKLAD_TOKEN || ''; 
+    private token: string = process.env.MOISKLAD_TOKEN || '';
 
     private headers = {'User-Agent': 'Plitochka.by client', 'Accept': '*/*', 'Content-Type': "application/json",
                        'Content-Encoding': 'gzip, deflate, br', 'Connection': 'keep-alive',
