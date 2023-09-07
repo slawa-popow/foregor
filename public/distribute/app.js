@@ -241,7 +241,7 @@ class AppConnect {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify([data])
             });
             const result = yield resp.json();
             return result;

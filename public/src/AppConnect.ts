@@ -105,13 +105,13 @@ export class AppConnect {
     }
 
     // отправка на сервер данных от телеграм /////тест
-    async sendTelegramData(data: any) {
+    async sendTelegramData(data: string) {
         const resp = await fetch(this.host + 'fromTelegram', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify([data])
         });
         const result = await resp.json();
         return result;
