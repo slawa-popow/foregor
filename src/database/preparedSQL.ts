@@ -44,14 +44,18 @@ export const createTableProduct = (tableName: string, _dbName: string = ''): str
 export const createTableOprihod = (tableName: string): string => { 
    return `CREATE TABLE IF NOT EXISTS ${tableName} (
 	id INT(11) NOT NULL AUTO_INCREMENT,
+    products_id INT(11) NOT NULL,
 	name VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	color VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+    article VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	count INT(11) NOT NULL DEFAULT '0',
 	pathName VARCHAR(250) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	date VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
 	time VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
     photoPath VARCHAR(200) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
-	PRIMARY KEY (id) USING BTREE
+	PRIMARY KEY (id) USING BTREE,
+    INDEX products_id (products_id) USING BTREE,
+	CONSTRAINT products_id FOREIGN KEY (products_id) REFERENCES products (id) ON UPDATE NO ACTION ON DELETE NO ACTION
     )
     COMMENT='Таблица одного оприходования'
     COLLATE='utf8mb4_general_ci'

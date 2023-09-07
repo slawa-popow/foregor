@@ -1,5 +1,5 @@
 import { BaseCommand } from "../concreteCommands/BaseCommand";
-import { MinimizeResponseListProds } from "../types/TypesFrontend";
+import { DoOprihod, MinimizeResponseListProds } from "../types/TypesFrontend";
 import { AttributesByPathName } from '../types/AttributesByPathName';
 
 
@@ -13,6 +13,7 @@ export class Invoker {
     private sendFormOprihod: BaseCommand | null = null;     // отправить форму для добавления товара в таблицу 
     private getDataTableOprihod: BaseCommand | null = null; // получить таблицу добавленных продуктов для оприходования
     private deleteRowFromTable: BaseCommand | null = null;  // удалить строку из таблицы оприходований
+    private oprihod: BaseCommand | null = null;             // оприходовать
 
      /**
      * -----------------------------------------------------------------------
@@ -26,6 +27,21 @@ export class Invoker {
 
     async sendDataFormOprihod<T>(formData: FormData): Promise<T[]> {
         const result = (this.sendFormOprihod) ? await this.sendFormOprihod.execute<T>(formData) : null;
+        return (result) ? result : [];
+    }
+
+
+    /**
+     * -----------------------------------------------------------------------
+     * @param command Оприходовать таблицу в МойСклад
+     */
+    setCommandOprihod(command: BaseCommand) {
+        if (command)
+            this.oprihod = command;
+    }
+
+    async sendOprihod<T>(oprihodData: DoOprihod): Promise<T[]> {
+        const result = (this.oprihod) ? await this.oprihod.execute<T>(oprihodData) : null;
         return (result) ? result : [];
     }
 

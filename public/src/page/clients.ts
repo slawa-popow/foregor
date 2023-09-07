@@ -81,6 +81,7 @@ export class AllDataTableOprihod extends ClientData implements Clearable {
 }
 
 
+
 /**
  * Наполняет html select "Категории" 
  */
@@ -101,9 +102,30 @@ export class FillSelectPathNames extends ClientData implements Clearable {
             throw new Error("ERROR IN executeCallback<T>(holder) --> class FillSelectPathNames ")
         }
     }
+}
 
+
+/**
+ * Ответ сервера после оприходования 
+ */
+export class AnswerOprihod extends ClientData implements Clearable {
+     
+    constructor(idsel: string) {
+        super(idsel);         
+    }
+
+    async executeCallback<T>(holder: Holder<T>): Promise<void> {
+        const arrdata = holder.data.arrData as string[];
+        if (this.cnt) {
+            // this.clearContainer();
+            await dom.answerOprihod(this.cnt, arrdata);
+        } else {
+            throw new Error("ERROR IN executeCallback<T>(holder) --> class AnswerOprihod ")
+        }
+    }
 
 }
+
 
 /**
  * Наполняет html select "Цвет" 
@@ -123,7 +145,6 @@ export class FillSelectColor extends ClientData implements Clearable {
             throw new Error("ERROR IN executeCallback<T>(holder) --> class FillSelectColor ")
         }
     }
-
 
 }
 

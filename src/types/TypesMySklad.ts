@@ -261,3 +261,26 @@ export interface MinimizeResponseListProds {
     pathName: string;
     idHref: string;
 };
+
+// создавать оприходования в МойСклад
+export interface ExportOprihod {
+    organization: {meta: Meta};
+    store: {meta: Meta};
+    description: string;            // комментарии
+    positions: Array<{
+        quantity: number,
+        price ?: number,
+        assortment: {
+            meta: Meta
+        }
+    }>;
+}
+
+
+export interface TypeJoinOprihod {
+    pid: string;
+    name: string;
+    color: string;
+    article: string;
+    count: number;
+}

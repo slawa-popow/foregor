@@ -3,10 +3,18 @@ import { appcn } from "./src/AppConnect";
 import { Holder, ResultHolder } from "./src/ResultHolder.ts/ResultHolder";
 import { GetAllFromTableOprihod } from "./src/concreteCommands/GetAllFromTableOprihod";
 import { GetAllProductFolder } from "./src/concreteCommands/GetAllProductFolder";
+import { Oprihod } from "./src/concreteCommands/Oprihod";
 import { dom } from "./src/dom"; 
 import { invoker } from "./src/invoke/Invoker";
-import { AllDataTableOprihod, FillSelectPathNames, TableProducts } from "./src/page/clients";
+import { AllDataTableOprihod, AnswerOprihod, FillSelectPathNames, TableProducts } from "./src/page/clients";
 import { EnumPageName } from "./src/types/EnumPageName";
+
+const datep = document.getElementById('currenttime');
+setInterval( () => {
+    if (datep)
+        datep.textContent = 'Таблица оприходования ' + 
+                new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"});
+}, 1000);
 
 (() =>{
     const inputCount = document.getElementById("sel-count");
@@ -34,6 +42,22 @@ sendFormOprihodButton?.addEventListener('click', dom.clbSendFormOprihod);
 
 const clientFillselPathName = new FillSelectPathNames('sel-pathName');  // клиент select thml "Категории"
 export const clientTableOptihod = new AllDataTableOprihod('contain-table-oprihod');
+
+// оприходовать
+invoker.setCommandOprihod(new Oprihod(appcn));
+const clientResOprihod = new AnswerOprihod("oprihodinfo");
+const answerResHolder = new ResultHolder(clientResOprihod);
+const btnOprihod = document.getElementById('input-oprihod');
+btnOprihod?.addEventListener('click', async () => {
+    dom.loadImage(true, 'loadoprihod');
+    dom.textMessage('oprihodinfo', 'оприходование в МойСклад...');
+    const res = await invoker.sendOprihod({who: "admin", role: "admin"});
+    const rHolder = new Holder('answerOprihod', res);
+    answerResHolder.execute(rHolder);
+    dom.loadImage(false, 'loadoprihod');
+    dom.textMessage('oprihodinfo');
+});
+
 /**
  * старт при загрузке стр.
  */
@@ -58,8 +82,7 @@ if (cntOprihod && cntAllprd)
             const target = e.target as HTMLAnchorElement;
             switch (target.name) {
                 case EnumPageName.OPRIHOD: {
-                    await firstStart();
-                                        
+                    await firstStart();          
                     break;
                 }
                 case EnumPageName.ALLPROD: {

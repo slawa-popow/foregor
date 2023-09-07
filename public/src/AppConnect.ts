@@ -1,4 +1,4 @@
-import { TypeInputOprihod } from "./types/TypesFrontend";
+import { DoOprihod, TypeInputOprihod } from "./types/TypesFrontend";
 
 
 const DEVHOST = '/';
@@ -42,6 +42,21 @@ export class AppConnect {
         const response = await fetch(this.host + 'formOprihod', {
             method: 'POST',
             body: formData
+        });
+        const result = await response.json();
+        
+        return result;
+    }
+
+
+    // Кнопка оприходовать
+    async doOprihod(data: DoOprihod) {
+        const response = await fetch(this.host + 'doOprihod', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              body: JSON.stringify(data)
         });
         const result = await response.json();
         

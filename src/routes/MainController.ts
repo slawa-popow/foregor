@@ -84,6 +84,16 @@ class MainController {
 
 
     /**
+     * Оприходовать
+     */
+    async doOprihod(request: Request, response: Response) {
+        const data = request.body;
+        const resultOprihod = await db.doOprihod();
+        return response.status(200).json([data, resultOprihod]);
+    }
+
+
+    /**
      * {delId: idrow}
      */
     async deleteRow(request: Request, response: Response) {

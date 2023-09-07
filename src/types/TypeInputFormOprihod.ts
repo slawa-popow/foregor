@@ -7,7 +7,9 @@ export interface TypeInputFormOprihod {
     count: string;
     date: string;
     time: string;
+    article: string;
     id ?: string | number;
     isPhoto ?: boolean;
     photoPath ?: string;
+    products_id ?: number;
 }

@@ -1,0 +1,104 @@
+[
+  {
+    "organization": {
+      "meta": {
+        "href": "https://online.moysklad.ru/api/remap/1.2/entity/organization/831552fb-1cc9-11ea-0a80-04b10005f63c",
+        "metadataHref": "https://online.moysklad.ru/api/remap/1.2/entity/organization/metadata",
+        "type": "organization",
+        "mediaType": "application/json"
+      }
+    },
+    "store": {
+      "meta": {
+        "href": "https://online.moysklad.ru/api/remap/1.2/entity/store/83167117-1cc9-11ea-0a80-04b10005f63e",
+        "metadataHref": "https://online.moysklad.ru/api/remap/1.2/entity/store/metadata",
+        "type": "store",
+        "mediaType": "application/json"
+      }
+    },
+    "description": "Шоколадка шоколад ",
+    "positions": [
+      {
+        "quantity": 1,
+        "assortment": {
+          "meta": {
+            "href": "https://online.moysklad.ru/api/remap/1.2/entity/assortment?filter=id=87d7b882-8b07-11eb-0a80-094c002d727c",
+            "type": "assortment",
+            "mediaType": "application/json",
+            "size": 1,
+            "limit": 1000,
+            "offset": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "organization": {
+      "meta": {
+        "href": "https://online.moysklad.ru/api/remap/1.2/entity/organization/831552fb-1cc9-11ea-0a80-04b10005f63c",
+        "metadataHref": "https://online.moysklad.ru/api/remap/1.2/entity/organization/metadata",
+        "type": "organization",
+        "mediaType": "application/json"
+      }
+    },
+    "store": {
+      "meta": {
+        "href": "https://online.moysklad.ru/api/remap/1.2/entity/store/83167117-1cc9-11ea-0a80-04b10005f63e",
+        "metadataHref": "https://online.moysklad.ru/api/remap/1.2/entity/store/metadata",
+        "type": "store",
+        "mediaType": "application/json"
+      }
+    },
+    "description": "Шашка коричневый ",
+    "positions": [
+      {
+        "quantity": 12,
+        "assortment": {
+          "meta": {
+            "href": "https://online.moysklad.ru/api/remap/1.2/entity/assortment?filter=id=23ec21a6-8b07-11eb-0a80-008c002cf6eb",
+            "type": "assortment",
+            "mediaType": "application/json",
+            "size": 1,
+            "limit": 1000,
+            "offset": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "organization": {
+      "meta": {
+        "href": "https://online.moysklad.ru/api/remap/1.2/entity/organization/831552fb-1cc9-11ea-0a80-04b10005f63c",
+        "metadataHref": "https://online.moysklad.ru/api/remap/1.2/entity/organization/metadata",
+        "type": "organization",
+        "mediaType": "application/json"
+      }
+    },
+    "store": {
+      "meta": {
+        "href": "https://online.moysklad.ru/api/remap/1.2/entity/store/83167117-1cc9-11ea-0a80-04b10005f63e",
+        "metadataHref": "https://online.moysklad.ru/api/remap/1.2/entity/store/metadata",
+        "type": "store",
+        "mediaType": "application/json"
+      }
+    },
+    "description": "Старый город оливковый ШРГН",
+    "positions": [
+      {
+        "quantity": 7,
+        "assortment": {
+          "meta": {
+            "href": "https://online.moysklad.ru/api/remap/1.2/entity/assortment?filter=id=40f07e5a-e5c4-11ed-0a80-05fe00102778",
+            "type": "assortment",
+            "mediaType": "application/json",
+            "size": 1,
+            "limit": 1000,
+            "offset": 0
+          }
+        }
+      }
+    ]
+  }
+]

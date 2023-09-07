@@ -24,10 +24,17 @@ const AppConnect_1 = __webpack_require__(/*! ./src/AppConnect */ "./public/src/A
 const ResultHolder_1 = __webpack_require__(/*! ./src/ResultHolder.ts/ResultHolder */ "./public/src/ResultHolder.ts/ResultHolder.ts");
 const GetAllFromTableOprihod_1 = __webpack_require__(/*! ./src/concreteCommands/GetAllFromTableOprihod */ "./public/src/concreteCommands/GetAllFromTableOprihod.ts");
 const GetAllProductFolder_1 = __webpack_require__(/*! ./src/concreteCommands/GetAllProductFolder */ "./public/src/concreteCommands/GetAllProductFolder.ts");
+const Oprihod_1 = __webpack_require__(/*! ./src/concreteCommands/Oprihod */ "./public/src/concreteCommands/Oprihod.ts");
 const dom_1 = __webpack_require__(/*! ./src/dom */ "./public/src/dom.ts");
 const Invoker_1 = __webpack_require__(/*! ./src/invoke/Invoker */ "./public/src/invoke/Invoker.ts");
 const clients_1 = __webpack_require__(/*! ./src/page/clients */ "./public/src/page/clients.ts");
 const EnumPageName_1 = __webpack_require__(/*! ./src/types/EnumPageName */ "./public/src/types/EnumPageName.ts");
+const datep = document.getElementById('currenttime');
+setInterval(() => {
+    if (datep)
+        datep.textContent = 'Таблица оприходования ' +
+            new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
+}, 1000);
 (() => {
     const inputCount = document.getElementById("sel-count");
     if (inputCount) {
@@ -48,6 +55,20 @@ const sendFormOprihodButton = document.getElementById('input-product');
 sendFormOprihodButton === null || sendFormOprihodButton === void 0 ? void 0 : sendFormOprihodButton.addEventListener('click', dom_1.dom.clbSendFormOprihod);
 const clientFillselPathName = new clients_1.FillSelectPathNames('sel-pathName'); // клиент select thml "Категории"
 exports.clientTableOptihod = new clients_1.AllDataTableOprihod('contain-table-oprihod');
+// оприходовать
+Invoker_1.invoker.setCommandOprihod(new Oprihod_1.Oprihod(AppConnect_1.appcn));
+const clientResOprihod = new clients_1.AnswerOprihod("oprihodinfo");
+const answerResHolder = new ResultHolder_1.ResultHolder(clientResOprihod);
+const btnOprihod = document.getElementById('input-oprihod');
+btnOprihod === null || btnOprihod === void 0 ? void 0 : btnOprihod.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+    dom_1.dom.loadImage(true, 'loadoprihod');
+    dom_1.dom.textMessage('oprihodinfo', 'оприходование в МойСклад...');
+    const res = yield Invoker_1.invoker.sendOprihod({ who: "admin", role: "admin" });
+    const rHolder = new ResultHolder_1.Holder('answerOprihod', res);
+    answerResHolder.execute(rHolder);
+    dom_1.dom.loadImage(false, 'loadoprihod');
+    dom_1.dom.textMessage('oprihodinfo');
+}));
 /**
  * старт при загрузке стр.
  */
@@ -144,6 +165,20 @@ class AppConnect {
             const response = yield fetch(this.host + 'formOprihod', {
                 method: 'POST',
                 body: formData
+            });
+            const result = yield response.json();
+            return result;
+        });
+    }
+    // Кнопка оприходовать
+    doOprihod(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(this.host + 'doOprihod', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
             });
             const result = yield response.json();
             return result;
@@ -510,6 +545,45 @@ exports.GetAttributesByPathName = GetAttributesByPathName;
 
 /***/ }),
 
+/***/ "./public/src/concreteCommands/Oprihod.ts":
+/*!************************************************!*\
+  !*** ./public/src/concreteCommands/Oprihod.ts ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Oprihod = void 0;
+const BaseCommand_1 = __webpack_require__(/*! ./BaseCommand */ "./public/src/concreteCommands/BaseCommand.ts");
+/**
+ * Оприходовать таблицу в МойСклад
+ *
+ */
+class Oprihod extends BaseCommand_1.BaseCommand {
+    constructor(reciever) {
+        super(reciever);
+    }
+    execute(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.respExecute = (yield this.reciever.doOprihod(data)); //appcnt
+            return this.getResponse();
+        });
+    }
+}
+exports.Oprihod = Oprihod;
+
+
+/***/ }),
+
 /***/ "./public/src/dom.ts":
 /*!***************************!*\
   !*** ./public/src/dom.ts ***!
@@ -589,7 +663,9 @@ exports.dom = (() => {
                 const option = document.createElement('option');
                 option.setAttribute('id', `${select.id}_${i}`);
                 option.setAttribute('value', v);
-                option.textContent = v;
+                const shortSplitPathName = v.split('/');
+                const shortPname = shortSplitPathName.slice(shortSplitPathName.length - 2, shortSplitPathName.length).join('/');
+                option.textContent = shortPname;
                 select === null || select === void 0 ? void 0 : select.appendChild(option);
             });
         });
@@ -609,7 +685,7 @@ exports.dom = (() => {
         return __awaiter(this, void 0, void 0, function* () {
             e.preventDefault();
             const form = e.target.form;
-            const names = ["sellist-pathName", "sellist-name", "sellist-color", "sellist-count", "sellist-photo"];
+            const names = ["sellist-pathName", "sellist-name", "sellist-article", "sellist-color", "sellist-count", "sellist-photo"];
             const fdata = new FormData();
             let i = 0;
             for (let el of form) {
@@ -647,17 +723,17 @@ exports.dom = (() => {
             const dt = currDate.split(',');
             fdata.append('date', dt[0].trim());
             fdata.append('time', dt[1].trim());
-            loadImage(true);
+            loadImage(true, 'loadstate');
             textMessage('errinfo', 'Отправка данных...');
             Invoker_1.invoker.setSendFormOprihod(cmdSendDataFormOprihod);
             const result = yield Invoker_1.invoker.sendDataFormOprihod(fdata);
             if (Array.isArray(result) && result.length === 1 && result[0].errors) {
                 const msgarr = result[0].errors.map(v => { return v.message; }).join('; ');
-                loadImage(false);
+                loadImage(false, 'loadstate');
                 textMessage('errinfo', 'пустое поле "количество"; ' + msgarr);
             }
             else {
-                loadImage(false);
+                loadImage(false, 'loadstate');
                 textMessage('errinfo');
                 const holderTableOprh = new ResultHolder_1.ResultHolder(__1.clientTableOptihod);
                 const holderTO = new ResultHolder_1.Holder('holderFirstStart', result);
@@ -714,7 +790,7 @@ exports.dom = (() => {
             const thead = document.createElement('thead');
             thead.classList.add('thead-light');
             const tr = document.createElement('tr'); //(name, color, count, pathName, date, time, photoPath)
-            const titleTable = ['id', 'название', 'цвет', 'кол-во', 'из категории', 'дата', 'время', ''];
+            const titleTable = ['id', 'название', 'цвет', 'артикул', 'кол-во', 'из категории', 'дата', 'время', ''];
             titleTable.forEach((v) => {
                 const th = document.createElement('th');
                 th.textContent = v;
@@ -747,7 +823,7 @@ exports.dom = (() => {
                         yield resDelHolder.execute(delHolder);
                     }
                 }));
-                for (let cellName of [data.id, data.name || '', data.color || '', data.count || '',
+                for (let cellName of [data.products_id, data.name || '', data.color || '', data.article || '', data.count || '',
                     lastValPathName(data.pathName), data.date || '', data.time || '',]) {
                     const td = document.createElement('td');
                     td.textContent = '' + cellName;
@@ -762,6 +838,11 @@ exports.dom = (() => {
             });
             table.appendChild(tbody);
             return table;
+        });
+    }
+    function answerOprihod(_cnt, arrdata) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('dom.answerOprihod():\n', arrdata);
         });
     }
     /**
@@ -814,8 +895,8 @@ exports.dom = (() => {
      * включить/выключить картинку загрузки
      * @param on
      */
-    function loadImage(on) {
-        const loadImg = document.getElementById('loadstate');
+    function loadImage(on, id) {
+        const loadImg = document.getElementById(id);
         if (on) {
             loadImg === null || loadImg === void 0 ? void 0 : loadImg.classList.remove('noloadstate');
             loadImg === null || loadImg === void 0 ? void 0 : loadImg.classList.add('loadstate');
@@ -831,6 +912,7 @@ exports.dom = (() => {
         setCallbackSelect, delCallbackSelect,
         clbSelPathName, clbSendFormOprihod,
         loadImage, textMessage, makeOprihodTable,
+        answerOprihod,
     };
     return publicApi;
 })();
@@ -867,6 +949,7 @@ class Invoker {
         this.sendFormOprihod = null; // отправить форму для добавления товара в таблицу 
         this.getDataTableOprihod = null; // получить таблицу добавленных продуктов для оприходования
         this.deleteRowFromTable = null; // удалить строку из таблицы оприходований
+        this.oprihod = null; // оприходовать
     }
     /**
     * -----------------------------------------------------------------------
@@ -880,6 +963,20 @@ class Invoker {
     sendDataFormOprihod(formData) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = (this.sendFormOprihod) ? yield this.sendFormOprihod.execute(formData) : null;
+            return (result) ? result : [];
+        });
+    }
+    /**
+     * -----------------------------------------------------------------------
+     * @param command Оприходовать таблицу в МойСклад
+     */
+    setCommandOprihod(command) {
+        if (command)
+            this.oprihod = command;
+    }
+    sendOprihod(oprihodData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = (this.oprihod) ? yield this.oprihod.execute(oprihodData) : null;
             return (result) ? result : [];
         });
     }
@@ -984,7 +1081,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FillSelectName = exports.FillSelectColor = exports.FillSelectPathNames = exports.AllDataTableOprihod = exports.TableProducts = exports.ClientData = void 0;
+exports.FillSelectName = exports.FillSelectColor = exports.AnswerOprihod = exports.FillSelectPathNames = exports.AllDataTableOprihod = exports.TableProducts = exports.ClientData = void 0;
 const dom_1 = __webpack_require__(/*! ../dom */ "./public/src/dom.ts");
 // import { MinimizeResponseListProds } from "../types/TypesFrontend";
 class ClientData {
@@ -1079,6 +1176,27 @@ class FillSelectPathNames extends ClientData {
     }
 }
 exports.FillSelectPathNames = FillSelectPathNames;
+/**
+ * Ответ сервера после оприходования
+ */
+class AnswerOprihod extends ClientData {
+    constructor(idsel) {
+        super(idsel);
+    }
+    executeCallback(holder) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const arrdata = holder.data.arrData;
+            if (this.cnt) {
+                // this.clearContainer();
+                yield dom_1.dom.answerOprihod(this.cnt, arrdata);
+            }
+            else {
+                throw new Error("ERROR IN executeCallback<T>(holder) --> class AnswerOprihod ");
+            }
+        });
+    }
+}
+exports.AnswerOprihod = AnswerOprihod;
 /**
  * Наполняет html select "Цвет"
  */

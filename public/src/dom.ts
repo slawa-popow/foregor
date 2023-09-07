@@ -62,7 +62,9 @@ export const dom = (() => {
             const option = document.createElement('option');
             option.setAttribute('id', `${select.id}_${i}`);
             option.setAttribute('value', v);
-            option.textContent = v;
+            const shortSplitPathName = v.split('/');
+            const shortPname = shortSplitPathName.slice(shortSplitPathName.length-2, shortSplitPathName.length).join('/');
+            option.textContent = shortPname;
             select?.appendChild(option);
         });
     }
@@ -86,7 +88,7 @@ export const dom = (() => {
     async function clbSendFormOprihod(e: Event) {
         e.preventDefault();
         const form = (<HTMLFormElement> e.target).form as HTMLFormElement;
-        const names = ["sellist-pathName", "sellist-name", "sellist-color", "sellist-count", "sellist-photo"];
+        const names = ["sellist-pathName", "sellist-name", "sellist-article", "sellist-color", "sellist-count", "sellist-photo"];
         const fdata = new FormData();
         let i = 0; 
          
@@ -124,7 +126,7 @@ export const dom = (() => {
         fdata.append('date', dt[0].trim());
         fdata.append('time', dt[1].trim());
 
-        loadImage(true); 
+        loadImage(true, 'loadstate'); 
         textMessage('errinfo', 'Отправка данных...');   
         invoker.setSendFormOprihod(cmdSendDataFormOprihod);
         
@@ -132,10 +134,10 @@ export const dom = (() => {
         if (Array.isArray(result) && result.length === 1 && result[0].errors) {
             const msgarr = result[0].errors.map(v => {return v.message}).join('; ');
             
-            loadImage(false);
+            loadImage(false, 'loadstate');
             textMessage('errinfo', 'пустое поле "количество"; ' + msgarr);
         } else {
-            loadImage(false);
+            loadImage(false, 'loadstate');
             textMessage('errinfo');
              
             const holderTableOprh = new ResultHolder(clientTableOptihod);
@@ -195,7 +197,7 @@ export const dom = (() => {
         const thead = document.createElement('thead');
         thead.classList.add('thead-light');
         const tr = document.createElement('tr'); //(name, color, count, pathName, date, time, photoPath)
-        const titleTable = ['id', 'название', 'цвет', 'кол-во', 'из категории', 'дата', 'время', ''];
+        const titleTable = ['id', 'название', 'цвет', 'артикул', 'кол-во', 'из категории', 'дата', 'время', ''];
         titleTable.forEach((v) => {
             const th = document.createElement('th');
             th.textContent = v;
@@ -229,7 +231,7 @@ export const dom = (() => {
                 }   
             });
 
-            for (let cellName of [data.id, data.name || '', data.color || '', data.count || '', 
+            for (let cellName of [data.products_id, data.name || '', data.color || '', data.article || '', data.count || '', 
                 lastValPathName(data.pathName), data.date || '', data.time || '', ]) {
                     const td = document.createElement('td');
                     td.textContent = ''+cellName;
@@ -248,7 +250,9 @@ export const dom = (() => {
     }
 
 
-    
+    async function answerOprihod(_cnt: HTMLSpanElement, arrdata: any[]) {
+        console.log('dom.answerOprihod():\n', arrdata);
+    }
 
 
     /**
@@ -301,8 +305,8 @@ export const dom = (() => {
      * включить/выключить картинку загрузки
      * @param on 
      */
-    function loadImage(on: boolean) {
-        const loadImg = document.getElementById('loadstate');
+    function loadImage(on: boolean, id: string) {
+        const loadImg = document.getElementById(id);
         if (on) {
             loadImg?.classList.remove('noloadstate');
             loadImg?.classList.add('loadstate');
@@ -318,7 +322,7 @@ export const dom = (() => {
         setCallbackSelect, delCallbackSelect, 
         clbSelPathName, clbSendFormOprihod,
         loadImage, textMessage, makeOprihodTable,
-
+        answerOprihod,
     };
 
 

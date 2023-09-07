@@ -6,6 +6,9 @@ import dotenv from 'dotenv';
 import { AttributesByPathName, IReturnGetUniqPathes } from '../types/TypesDB';
 import { TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
 import { createTableOprihod } from './preparedSQL';
+import { mySklad } from '../mysklad/MySklad';
+import { TypeJoinOprihod } from '../types/TypesMySklad';
+
  
  
 dotenv.config();
@@ -140,6 +143,50 @@ class MySqlAgent {
         return [];
     }
 
+    /**
+     * Оприходовать таблицу в МойСклад
+     */
+    async doOprihod() {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                
+                const [_arrIds, _serv] = await connection.query(`
+                    SELECT ${Table.Products}.pid, ${Table.OneOprihod}.name, ${Table.OneOprihod}.color, ${Table.OneOprihod}.article, ${Table.OneOprihod}.count
+                    FROM
+                    ${Table.OneOprihod} INNER JOIN ${Table.Products}
+                    ON ${Table.OneOprihod}.products_id=${Table.Products}.id;
+                `);
+                const arrIds = _arrIds as TypeJoinOprihod[];
+                const mysklResult =  await mySklad.oprihod(arrIds);
+                
+                return [mysklResult];
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->doOprihod()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
+    }
+
+
+    async getIdFromProducts(color: string, name: string): Promise<{id: number}[]> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                const [_idProd, _serv] = await connection.query(`SELECT id FROM ${Table.Products} WHERE name in ("${name}") AND color in ("${color}")`);
+                const idProd = _idProd as {id: number}[];  
+                return (idProd.length > 0) ? [idProd[0]] : [];
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->setTestData()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
+    }
+
 
     /**
      * Добавить один продукт в таблицу и вернуть всю таблицу
@@ -151,14 +198,15 @@ class MySqlAgent {
         try {
             if (connection) {
                 await this.createTableIfNotExist(Table.OneOprihod);
+                
                 const arrValues = [
-                    prodData.name, prodData.color, (prodData.count === '') ? 0:prodData.count, prodData.pathName,
+                    prodData.id, prodData.name, prodData.color, prodData.article, (prodData.count === '') ? 0:prodData.count, prodData.pathName,
                     prodData.date, prodData.time, prodData.photoPath || ''
                 ];
                 await connection.query(`
                     INSERT INTO ${Table.OneOprihod}
-                    (name, color, count, pathName, date, time, photoPath)
-                    VALUES(?, ?, ?, ?, ?, ?, ?)
+                    (products_id, name, color, article, count, pathName, date, time, photoPath)
+                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `, arrValues); 
                 const allOprihod = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod);
                 return allOprihod;

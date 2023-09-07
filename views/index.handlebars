@@ -44,6 +44,14 @@
            {{!-- ---- dynamic fill ---- --}}
           </select>
 
+          <label for="sel-article">Артикул:</label>
+          <select class="form-control" id="sel-article" name="sellist-article">
+            <option></option>
+            <option>УЦЕНКА</option>
+            <option>НК</option>
+            <option>ШРГН</option>
+          </select>
+
           <label for="sel-color">Цвет:</label>
             <select class="form-control" id="sel-color" name="sellist-color">
             {{!-- ---- dynamic fill ---- --}}
@@ -68,23 +76,24 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm">
-            <p style="font-size: 1.1em; text-align: center; margin: 15px 0;">Таблица оприходования {{data.currTime}}</p>
+            <p id="currenttime" style="font-size: 1.1em; text-align: center; margin: 15px 0;">Таблица оприходования {{data.currTime}}</p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-1 ">
-            <div class="col d-flex justify-content-end"> <span id="oprihodinfo" style="font-size: 0.8em; padding-right: 10px;"></span><img id="loadoprihod" class="noloadstate" src="styles/load-img.gif" alt=""> </div>
+            <div class="col d-flex justify-content-end"> <span id="oprihodinfo" style="font-size: 0.8em; padding-right: 10px;"></span><img id="loadoprihod" class="noloadstate" src="styles/load-img.gif" alt="" style="margin-bottom: 10px;"> </div>
           </div>
           <div class="col-sm-11 ">
             <div class="col d-flex justify-content-end"><button id="input-oprihod" type="submit" class="btn btn-success">Оприходовать</button></div>
           </div>
-
+          </div>
+          <div class="row" style="margin-left: -30px; padding-left: 0;">
           {{!-- таблица --}}
-          <div class="col-sm">
+          <div class="col-sm" >
             <div id="contain-table-oprihod"></div>
           </div>
-
-        </div>
+          </div>
+        
       </div>
 
     </div>

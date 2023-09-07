@@ -76,5 +76,5 @@ const storage = multer.diskStorage({
     }
 }
 
-  // file - type input html формы
+  // file - name FormData input html формы
 export const fileUploader = multer({ storage: storage, fileFilter: fileFilterMiddleware }).single('file'); 
