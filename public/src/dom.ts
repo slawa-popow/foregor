@@ -21,7 +21,7 @@ export const dom = (() => {
      * @param invoker отправитель команд
      */
     async function createListCats(idcontainer: string, table: ClientData, invoker: Invoker) {
-        const url = '/getProductByCats'; 
+        const url = 'getProductByCats'; 
         const cnt = document.getElementById(idcontainer);
         invoker.setGetProdByCats(new GetAllProdsByPathName(appcn));
         invoker.setAllProductsFolder(new GetAllProductFolder(appcn));

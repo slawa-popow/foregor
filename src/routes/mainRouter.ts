@@ -26,7 +26,7 @@ mainRouter.post('/formOprihod',
                  countFormOprihodValid(),
                  mainController.formDataOprihod);
 
-// mainRouter.post('/writeFromMyskladToDb', mainController.getAllProdFromMySkladAndWriteToDb);
+mainRouter.post('/writeFromMyskladToDb', mainController.getAllProdFromMySkladAndWriteToDb);
 
 mainRouter.post('/testdb', mainController.postTestDb);
 

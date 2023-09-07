@@ -1,13 +1,13 @@
 import { DoOprihod, TypeInputOprihod } from "./types/TypesFrontend";
 
-
-const DEVHOST = '/';
+const DEVHOST = 'https://foregor.vercel.app/';
+// const DEVHOST = '/';
 const HOST = DEVHOST;
 
 
 export class AppConnect {
 
-    host = '/';
+    host = HOST;
     constructor(host: string) {
         this.host = host;
     }
@@ -26,7 +26,7 @@ export class AppConnect {
     // получить товары по pathName
     async getProductByCats(url: string, uri: string) {
         const requestData = {URISklad: uri};
-        const resp = await fetch(url, {
+        const resp = await fetch(this.host+url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'

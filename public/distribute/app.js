@@ -125,11 +125,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = void 0;
-const DEVHOST = '/';
+const DEVHOST = 'https://foregor.vercel.app/';
+// const DEVHOST = '/';
 const HOST = DEVHOST;
 class AppConnect {
     constructor(host) {
-        this.host = '/';
+        this.host = HOST;
         this.host = host;
     }
     getProdFolders(url) {
@@ -148,7 +149,7 @@ class AppConnect {
     getProductByCats(url, uri) {
         return __awaiter(this, void 0, void 0, function* () {
             const requestData = { URISklad: uri };
-            const resp = yield fetch(url, {
+            const resp = yield fetch(this.host + url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -622,7 +623,7 @@ exports.dom = (() => {
      */
     function createListCats(idcontainer, table, invoker) {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = '/getProductByCats';
+            const url = 'getProductByCats';
             const cnt = document.getElementById(idcontainer);
             invoker.setGetProdByCats(new GetAllProdsByPathName_1.GetAllProdsByPathName(AppConnect_1.appcn));
             invoker.setAllProductsFolder(new GetAllProductFolder_1.GetAllProductFolder(AppConnect_1.appcn));
