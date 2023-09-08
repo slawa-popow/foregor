@@ -206,9 +206,8 @@ class MySqlAgent {
                             `, barr);
                         }
                     }
-                    
-
                 }
+                await connection.query(`DROP TABLE ${Table.OneOprihod};`)
             }
 
         } catch (e) { console.log('Error in MySqlAgent->doOprihod()->catch', e) } 
