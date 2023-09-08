@@ -12,16 +12,16 @@ import reader, { utils } from 'xlsx';
 class MainController {
 
     async getIndexPage(_request: Request, response: Response) {
-        return response.status(200).render('enter', {
-            layout: 'auth', }); 
+        return response.status(200).render('enterA', {
+            layout: 'authA', }); 
     }
 
     async getWorkPage(request: Request, response: Response) {
         if (request.session && request.session.auth) {
             const name = request.session.auth.name;
             const id = request.session.auth.id;
-            return response.status(200).render('index', {
-                layout: 'main', 
+            return response.status(200).render('indexA', {
+                layout: 'mainA', 
                 data: {
                     name: name,
                     id: id,
