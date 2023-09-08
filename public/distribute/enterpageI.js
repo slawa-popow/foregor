@@ -81,7 +81,7 @@ class AppConnect {
     getExcelFile() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const resp = yield fetch(this.host + 'getOprihodsExcel', { method: 'POST' });
+                const resp = yield fetch(this.host + 'getOprihodsExcel');
                 return resp.blob();
             }
             catch (e) {
