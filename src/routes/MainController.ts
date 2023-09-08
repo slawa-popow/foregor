@@ -5,7 +5,7 @@ import { MinimizeResponseListProds, PathNamePlitochka, ProductsByPathCats, Query
 import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
 import { DoOprihod, TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
-import { MRequest } from '../types/TypesApp';
+import { MRequest, Teledata } from '../types/TypesApp';
 
 
 class MainController {
@@ -15,24 +15,37 @@ class MainController {
             layout: 'auth', }); 
     }
 
-    async getWorkPage(_request: Request, response: Response) {
-        return response.status(200).render('index', {
-            layout: 'main', 
-            data: {
-                currTime: new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"})
-            }
-        }); 
+    async getWorkPage(request: Request, response: Response) {
+        if (request.session && request.session.auth) {
+            const [name, id] = request.session.auth;
+            return response.status(200).render('index', {
+                layout: 'main', 
+                data: {
+                    name: name,
+                    id: id,
+                    currTime: new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"})
+                }
+            }); 
+        }
+        return response.status(404).send("Доступ запрещен.");
     }
 
 
     // получить данные телеграм
+   
     async fromTelegram(request: Request, response: Response) {
-        const teleData = request.body;
-        console.log('teledata: ', teleData);
-        if (request.session && teleData && Object.keys(teleData).length > 0) {
-            const authStatus = {status: 200, href: 'work'};
-            request.session.auth = teleData;
-            return response.status(200).json(authStatus);
+        const teleData = request.body as Teledata;
+
+        if (request.session && teleData && Object.keys(teleData).length > 0 
+            && teleData.user && teleData.user.id) {
+            const usid = '' + teleData.user.id;
+            const result = await db.checkIdUser(usid);
+            if (result.length > 0) {
+                const [name, tgid] = result;
+                const authStatus = {status: 200, href: 'work'};
+                request.session.auth = {name: name, id: tgid};
+                return response.status(200).json(authStatus);
+            }
         }
         return response.status(400).json({status: 0, href: ''});
         

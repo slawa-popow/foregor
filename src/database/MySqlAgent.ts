@@ -18,6 +18,7 @@ export enum Table {
     Products='products',
     OneOprihod='one_oprihod',
     Oprihod='oprihod',
+    Admins='admins',
 };
 
 class MySqlAgent {
@@ -80,6 +81,24 @@ class MySqlAgent {
             connection.release();
         }
         return null;
+    }
+
+
+    async checkIdUser(usid: string): Promise<string[]> {
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                const [_res, _serv] = await connection.query(`SELECT name, telegram_id FROM ${Table.Admins} WHERE telegram_id=${usid}`);
+                const res = _res as {name: string, telegram_id: string}[];
+                if (res.length > 0)
+                    return [res[0].name, res[0].telegram_id]; 
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->checkIdUser()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return [];
     }
 
 
