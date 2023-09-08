@@ -1,7 +1,7 @@
 import { TelegramWebApps } from "telegram-webapps-types";
 import { DoOprihod, TypeInputOprihod } from "./types/TypesFrontend";
 
-const DEVHOST = 'https://foregor.vercel.app/work/';
+const DEVHOST = 'https://foregor.vercel.app/';
 // const DEVHOST = '/';
 export const HOST = DEVHOST;
 

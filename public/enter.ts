@@ -5,7 +5,7 @@ import { HOST, appcn } from './src/AppConnect';
 ///////////////////////////////////////////////////
 
 
-// const teledata =  {
+// const teledata =  {  
 //         query_id: 'AAHrOrtzAAAAAOs6u3MMOL44',
 //         user: {
 //           id: 1941650155,

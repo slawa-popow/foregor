@@ -64,7 +64,7 @@ btnOprihod?.addEventListener('click', async () => {
 });
 
 /**
- * старт при загрузке стр.
+ * старт при загрузке стр. 
  */
 const firstStart = async () => {
     invoker.setAllProductsFolder(new GetAllProductFolder(appcn));           // установить команду получения списка категорий

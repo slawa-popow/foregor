@@ -4,8 +4,8 @@ const webpack = require('webpack'); // для подключения jquery
 module.exports = {
 
   entry: {
-    appA: __dirname + '/public/index.ts',
-    enterpageA: __dirname + '/public/enter.ts'
+    app: __dirname + '/public/index.ts',
+    enterpage: __dirname + '/public/enter.ts'
   },
   
   output: {

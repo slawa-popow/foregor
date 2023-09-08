@@ -58,7 +58,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-const DEVHOST = 'https://foregor.vercel.app/work/';
+const DEVHOST = 'https://foregor.vercel.app/';
 // const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {
@@ -228,4 +228,4 @@ exports.appcn = new AppConnect(exports.HOST);
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=enterpageA.js.map
+//# sourceMappingURL=enterpage.js.map
