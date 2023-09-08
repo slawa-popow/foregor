@@ -48,6 +48,21 @@ setInterval(() => {
         });
     }
 })();
+(() => {
+    const dwnl = document.getElementById('input-downloadfile');
+    dwnl === null || dwnl === void 0 ? void 0 : dwnl.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const blob = yield AppConnect_1.appcn.getExcelFile();
+            if (blob) {
+                const file = window.URL.createObjectURL(blob);
+                window.location.assign(file);
+            }
+        }
+        catch (e) {
+            console.log('error download file', e);
+        }
+    }));
+})();
 const idContainerCats = 'div-categories';
 const cntAllprd = document.getElementById('li-menu-allprod');
 const cntOprihod = document.getElementById('li-menu-oprihod');
@@ -145,6 +160,18 @@ class AppConnect {
                 body: JSON.stringify({})
             });
             return yield resp.json();
+        });
+    }
+    getExcelFile() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const resp = yield fetch(this.host + 'getOprihodsExcel', { method: 'POST' });
+                return resp.blob();
+            }
+            catch (e) {
+                console.log('error AppConnect -> getExcelFile()');
+            }
+            return null;
         });
     }
     // получить товары по pathName
@@ -1318,4 +1345,4 @@ var EnumPageName;
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=appA.js.map

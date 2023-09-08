@@ -24,6 +24,15 @@ export class AppConnect {
         return await resp.json();
     }
 
+
+    async getExcelFile() {
+        try {
+            const resp = await fetch(this.host + 'getOprihodsExcel', {method: 'POST'});
+            return resp.blob();
+        } catch (e) { console.log('error AppConnect -> getExcelFile()') } 
+        return null;    
+    }
+
     // получить товары по pathName
     async getProductByCats(url: string, uri: string) {
         const requestData = {URISklad: uri};

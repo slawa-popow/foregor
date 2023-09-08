@@ -23,6 +23,7 @@ const AppConnect_1 = __webpack_require__(/*! ./src/AppConnect */ "./public/src/A
 window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
 (() => __awaiter(void 0, void 0, void 0, function* () {
+    // const initData = teledata;
     const initData = Telegram.WebApp.initDataUnsafe || {};
     const respdata = yield AppConnect_1.appcn.sendTelegramData(initData);
     if (respdata.status > 0) {
@@ -75,6 +76,18 @@ class AppConnect {
                 body: JSON.stringify({})
             });
             return yield resp.json();
+        });
+    }
+    getExcelFile() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const resp = yield fetch(this.host + 'getOprihodsExcel', { method: 'POST' });
+                return resp.blob();
+            }
+            catch (e) {
+                console.log('error AppConnect -> getExcelFile()');
+            }
+            return null;
         });
     }
     // получить товары по pathName
@@ -215,4 +228,4 @@ exports.appcn = new AppConnect(exports.HOST);
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=enterpage.js.map
+//# sourceMappingURL=enterpageA.js.map

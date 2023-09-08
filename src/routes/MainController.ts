@@ -6,6 +6,7 @@ import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList
 import { myValidationResult } from '../customErrors/customErrField';
 import { DoOprihod, TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
 import { MRequest, Teledata } from '../types/TypesApp';
+import reader, { utils } from 'xlsx';
 
 
 class MainController {
@@ -127,6 +128,20 @@ class MainController {
         }
         const resultOprihod = await db.doOprihod(indata.isSendSklad);
         return response.status(200).json([indata, resultOprihod]);
+    }
+
+
+    // отдать все оприходования эксэль файлом
+    async downloadEXELoprihod(_request: Request, response: Response) {
+        const alldata = await db.getAllDataTable<TypeInputFormOprihod>(Table.Oprihod);
+        const filename = './uploads/allOprihods.xlsx';
+        
+        const ws = reader.utils.json_to_sheet(alldata);
+        const wb = reader.utils.book_new();
+        utils.book_append_sheet(wb, ws, "Все оприходования");
+        reader.writeFile(wb, filename);
+
+        return response.download(filename);
     }
 
 

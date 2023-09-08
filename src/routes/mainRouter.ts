@@ -12,6 +12,7 @@ mainRouter.get('/',  mainController.getIndexPage);
 mainRouter.get('/work', authValidate, mainController.getWorkPage);
 mainRouter.post('/getTableOprihod', mainController.getTableOprihod);
 mainRouter.post('/deleteRow', deleteRowValid(), mainController.deleteRow);
+mainRouter.post('/getOprihodsExcel', mainController.downloadEXELoprihod);    // скачать файл
     // добавить потом фильтр авторизации
 mainRouter.post('/doOprihod', mainController.doOprihod);
 mainRouter.post('/fromTelegram', mainController.fromTelegram);
