@@ -34,7 +34,7 @@ class MainController {
 
     // получить данные телеграм
    
-    async fromTelegram(request: Request, response: Response) {
+    async fromTelegram(request: Request, response: Response) { 
         const teleData = request.body as Teledata;
 
         if (request.session && teleData && Object.keys(teleData).length > 0 

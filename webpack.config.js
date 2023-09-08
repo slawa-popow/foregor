@@ -5,7 +5,7 @@ module.exports = {
 
   entry: {
     app: __dirname + '/public/index.ts',
-    enter: __dirname + '/public/enter.ts'
+    enterpage: __dirname + '/public/enter.ts'
   },
   
   output: {
