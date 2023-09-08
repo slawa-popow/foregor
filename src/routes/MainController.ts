@@ -17,7 +17,8 @@ class MainController {
 
     async getWorkPage(request: Request, response: Response) {
         if (request.session && request.session.auth) {
-            const [name, id] = request.session.auth;
+            const name = request.session.auth.name;
+            const id = request.session.auth.id;
             return response.status(200).render('index', {
                 layout: 'main', 
                 data: {
