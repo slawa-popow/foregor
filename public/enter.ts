@@ -14,10 +14,11 @@ window.Telegram.WebApp.expand();
     const respdata = await appcn.sendTelegramData(initData) as {status: number, href: string}; 
     if (respdata.status > 0) {
         window.location.href = HOST + respdata.href;
-    } 
-    const henter = document.getElementById('henter');
-    const pwait = document.getElementById('pwait');
-    henter!.textContent = "Доступ запрещен.";
-    pwait!.textContent = "Войдите через телеграм-бот.";
+    } else {
+        const henter = document.getElementById('henter');
+        const pwait = document.getElementById('pwait');
+        henter!.textContent = "Доступ запрещен.";
+        pwait!.textContent = "Войдите через телеграм-бот.";
+    }
 
 })();
