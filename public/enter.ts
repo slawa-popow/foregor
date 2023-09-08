@@ -40,7 +40,7 @@ window.Telegram.WebApp.expand();
         const henter = document.getElementById('henter');
         const pwait = document.getElementById('pwait');
         henter!.textContent = "Доступ запрещен.";
-        pwait!.textContent = "Войдите через телеграм-бот.";
+        pwait!.textContent = "Войдите через телеграм-бот."; 
     }
 
 })();

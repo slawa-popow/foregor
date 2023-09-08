@@ -44,12 +44,12 @@ setInterval( () => {
                 window.location.assign(file);
             }
 
-        } catch (e) { console.log('error download file', e) }
+        } catch (e) { console.log('error download file', e) } 
     })
 })();
 
 
-const idContainerCats = 'div-categories';
+const idContainerCats = 'div-categories'; 
 const cntAllprd = document.getElementById('li-menu-allprod');
 const cntOprihod = document.getElementById('li-menu-oprihod');
 
