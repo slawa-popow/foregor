@@ -111,8 +111,15 @@ dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function
         e.preventDefault();
         const blob = yield AppConnect_1.appcn.getExcelFile();
         if (blob) {
-            const file = window.URL.createObjectURL(blob);
-            window.location.assign(file);
+            // const file = window.URL.createObjectURL(blob);
+            // window.location.assign(file);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "AllOprihods.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
         }
     }
     catch (e) {

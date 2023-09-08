@@ -110,8 +110,16 @@ dwnl!.addEventListener('click', async (e) => {
         e.preventDefault();
         const blob = await appcn.getExcelFile();
         if (blob) {
-            const file = window.URL.createObjectURL(blob);
-            window.location.assign(file);
+            // const file = window.URL.createObjectURL(blob);
+            // window.location.assign(file);
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "AllOprihods.xlsx";
+            document.body.appendChild(a); 
+            a.click();    
+            a.remove();   
         }
 
     } catch (e) { console.log('error download file', e) } 
