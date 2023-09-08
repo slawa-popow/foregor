@@ -52,7 +52,7 @@ class MySqlAgent {
      * @param pathName категория по которой вернуть цвет, имя
      */
     async getAttributesByPathName(pathName: string): Promise<AttributesByPathName | null> {
-        const connection = await this.pool!.getConnection();
+        const connection = await this.pool!.getConnection(); 
         try {
             if (connection) {
 
