@@ -34,19 +34,6 @@ setInterval( () => {
 
 })();
 
-(() => {
-    const dwnl = document.getElementById('input-downloadfile');
-    dwnl?.addEventListener('click', async () => {
-        try {
-            const blob = await appcn.getExcelFile();
-            if (blob) {
-                const file = window.URL.createObjectURL(blob);
-                window.location.assign(file);
-            }
-
-        } catch (e) { console.log('error download file', e) } 
-    })
-})();
 
 
 const idContainerCats = 'div-categories'; 
@@ -116,5 +103,18 @@ if (cntOprihod && cntAllprd)
 
 firstStart();
 
+
+const dwnl = document.getElementById('input-downloadfile');
+dwnl!.addEventListener('click', async (e) => {
+    try {
+        e.preventDefault();
+        const blob = await appcn.getExcelFile();
+        if (blob) {
+            const file = window.URL.createObjectURL(blob);
+            window.location.assign(file);
+        }
+
+    } catch (e) { console.log('error download file', e) } 
+})
 
  

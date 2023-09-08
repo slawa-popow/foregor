@@ -48,21 +48,6 @@ setInterval(() => {
         });
     }
 })();
-(() => {
-    const dwnl = document.getElementById('input-downloadfile');
-    dwnl === null || dwnl === void 0 ? void 0 : dwnl.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const blob = yield AppConnect_1.appcn.getExcelFile();
-            if (blob) {
-                const file = window.URL.createObjectURL(blob);
-                window.location.assign(file);
-            }
-        }
-        catch (e) {
-            console.log('error download file', e);
-        }
-    }));
-})();
 const idContainerCats = 'div-categories';
 const cntAllprd = document.getElementById('li-menu-allprod');
 const cntOprihod = document.getElementById('li-menu-oprihod');
@@ -120,6 +105,20 @@ if (cntOprihod && cntAllprd)
         }));
     }
 firstStart();
+const dwnl = document.getElementById('input-downloadfile');
+dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        e.preventDefault();
+        const blob = yield AppConnect_1.appcn.getExcelFile();
+        if (blob) {
+            const file = window.URL.createObjectURL(blob);
+            window.location.assign(file);
+        }
+    }
+    catch (e) {
+        console.log('error download file', e);
+    }
+}));
 
 
 /***/ }),
