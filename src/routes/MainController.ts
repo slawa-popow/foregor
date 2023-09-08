@@ -140,7 +140,7 @@ class MainController {
         const wb = reader.utils.book_new();
         utils.book_append_sheet(wb, ws, "Все оприходования");
         reader.writeFile(wb, filename);
-
+        response.set('Access-Control-Expose-Headers', 'Content-Disposition')
         return response.download(filename);
     }
 
