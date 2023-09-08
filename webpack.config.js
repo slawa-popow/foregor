@@ -2,10 +2,14 @@ const path = require('path');
 const webpack = require('webpack'); // для подключения jquery 
 
 module.exports = {
-  entry: __dirname + '/public/index.ts',
 
+  entry: {
+    app: __dirname + '/public/index.ts',
+    enter: __dirname + '/public/enter.ts'
+  },
+  
   output: {
-    filename: 'app.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'public/distribute'),
   },
 

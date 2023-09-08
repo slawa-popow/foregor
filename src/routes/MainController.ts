@@ -11,6 +11,11 @@ import { MRequest } from '../types/TypesApp';
 class MainController {
 
     async getIndexPage(_request: Request, response: Response) {
+        return response.status(200).render('enter', {
+            layout: 'auth', }); 
+    }
+
+    async getWorkPage(_request: Request, response: Response) {
         return response.status(200).render('index', {
             layout: 'main', 
             data: {
@@ -24,7 +29,13 @@ class MainController {
     async fromTelegram(request: Request, response: Response) {
         const teleData = request.body;
         console.log('teledata: ', teleData);
-        response.status(200).json(teleData);
+        if (request.session && teleData && Object.keys(teleData).length > 0) {
+            const authStatus = {status: 200, href: 'work'};
+            request.session.auth = teleData;
+            return response.status(200).json(authStatus);
+        }
+        return response.status(400).json({status: 0, href: ''});
+        
     }
 
 

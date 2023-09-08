@@ -53,3 +53,12 @@ export async function isExistsNameColor (request: Request, response: Response, n
     }
 };
 
+export async function authValidate (request: Request, response: Response, next: NextFunction) {
+    if (request.session && request.session.auth) {
+        const a = request.session.auth;
+        if (a && Object.keys(a).length > 0) {
+            return next();
+        }
+    }
+    return response.status(404).send('Доступ запрещен.');
+}

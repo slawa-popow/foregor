@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { mainController } from "./MainController";
-import { colorNameFormOprihodValid, countFormOprihodValid, deleteRowValid, 
+import { authValidate, colorNameFormOprihodValid, countFormOprihodValid, deleteRowValid, 
     isExistsNameColor, 
     uriSkladValid, validInputDataToGetAttributes } from "../middlewares/validator";
 import { fileUploader } from "../middlewares/fileUploader";
@@ -9,6 +9,7 @@ import { fileUploader } from "../middlewares/fileUploader";
 const mainRouter = Router(); 
 
 mainRouter.get('/',  mainController.getIndexPage);
+mainRouter.get('/work', authValidate, mainController.getWorkPage);
 mainRouter.post('/getTableOprihod', mainController.getTableOprihod);
 mainRouter.post('/deleteRow', deleteRowValid(), mainController.deleteRow);
     // добавить потом фильтр авторизации

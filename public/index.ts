@@ -8,18 +8,10 @@ import { dom } from "./src/dom";
 import { invoker } from "./src/invoke/Invoker";
 import { AllDataTableOprihod, AnswerOprihod, FillSelectPathNames, TableProducts } from "./src/page/clients";
 import { EnumPageName } from "./src/types/EnumPageName";
-import { TelegramWebApps } from 'telegram-webapps-types';
 
 
-declare const window: {
-    Telegram: TelegramWebApps.SDK;
-  } & Window;
 
-  window.Telegram.WebApp.ready();
-  window.Telegram.WebApp.expand();
-
-
-const datep = document.getElementById('currenttime');
+const datep = document.getElementById('currenttime');  
 setInterval( () => {
     if (datep)
         datep.textContent = 'Таблица оприходования ' + 
@@ -110,6 +102,5 @@ if (cntOprihod && cntAllprd)
 
 firstStart();
 
-const initData = Telegram.WebApp.initDataUnsafe || {};
-appcn.sendTelegramData(initData); 
+
  

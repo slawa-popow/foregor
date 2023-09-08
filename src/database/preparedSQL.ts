@@ -89,7 +89,7 @@ export const createTableOprihod = (tableName: string): string => {
 
 export const createTableAdmins = (tableName: string = 'admins'): string => {
     return `
-    CREATE TABLE ${tableName} (
+    CREATE TABLE IF NOT EXISTS ${tableName} (
         id INT(11) NOT NULL AUTO_INCREMENT,
         name VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
         telegram_id VARCHAR(150) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',

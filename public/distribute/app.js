@@ -29,8 +29,6 @@ const dom_1 = __webpack_require__(/*! ./src/dom */ "./public/src/dom.ts");
 const Invoker_1 = __webpack_require__(/*! ./src/invoke/Invoker */ "./public/src/invoke/Invoker.ts");
 const clients_1 = __webpack_require__(/*! ./src/page/clients */ "./public/src/page/clients.ts");
 const EnumPageName_1 = __webpack_require__(/*! ./src/types/EnumPageName */ "./public/src/types/EnumPageName.ts");
-window.Telegram.WebApp.ready();
-window.Telegram.WebApp.expand();
 const datep = document.getElementById('currenttime');
 setInterval(() => {
     if (datep)
@@ -107,8 +105,6 @@ if (cntOprihod && cntAllprd)
         }));
     }
 firstStart();
-const initData = Telegram.WebApp.initDataUnsafe || {};
-AppConnect_1.appcn.sendTelegramData(initData);
 
 
 /***/ }),
@@ -130,13 +126,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.appcn = exports.AppConnect = void 0;
-const DEVHOST = 'https://foregor.vercel.app/';
-// const DEVHOST = '/';
-const HOST = DEVHOST;
+exports.appcn = exports.AppConnect = exports.HOST = void 0;
+// const DEVHOST = 'https://foregor.vercel.app/';
+const DEVHOST = '/';
+exports.HOST = DEVHOST;
 class AppConnect {
     constructor(host) {
-        this.host = HOST;
+        this.host = exports.HOST;
         this.host = host;
     }
     getProdFolders(url) {
@@ -249,7 +245,7 @@ class AppConnect {
     }
 }
 exports.AppConnect = AppConnect;
-exports.appcn = new AppConnect(HOST);
+exports.appcn = new AppConnect(exports.HOST);
 
 
 /***/ }),
