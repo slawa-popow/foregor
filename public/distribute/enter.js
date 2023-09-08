@@ -28,6 +28,10 @@ window.Telegram.WebApp.expand();
     if (respdata.status > 0) {
         window.location.href = AppConnect_1.HOST + respdata.href;
     }
+    const henter = document.getElementById('henter');
+    const pwait = document.getElementById('pwait');
+    henter.textContent = "Доступ запрещен.";
+    pwait.textContent = "Войдите через телеграм-бот.";
 }))();
 
 
