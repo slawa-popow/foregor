@@ -141,7 +141,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-const DEVHOST = 'https://foregor.vercel.app/';
+const DEVHOST = 'https://foregor.vercel.app/work/';
 // const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {

@@ -20,26 +20,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const AppConnect_1 = __webpack_require__(/*! ./src/AppConnect */ "./public/src/AppConnect.ts");
-///////////////////////////////////////////////////
-const teledata = {
-    query_id: 'AAHrOrtzAAAAAOs6u3MMOL44',
-    user: {
-        id: 1941650155,
-        first_name: 'Slava',
-        last_name: '',
-        username: 'Pwg90',
-        language_code: 'ru',
-        allows_write_to_pm: true,
-        is_bot: true
-    },
-    auth_date: 1694156804,
-    hash: 'edf8278eebeb8f35e9d7e162afaf7038743be156699cc05b62e6c02d49f05e92'
-};
 window.Telegram.WebApp.ready();
 window.Telegram.WebApp.expand();
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    const initData = teledata;
-    // const initData = Telegram.WebApp.initDataUnsafe || {};
+    // const initData = teledata;
+    const initData = Telegram.WebApp.initDataUnsafe || {};
     const respdata = yield AppConnect_1.appcn.sendTelegramData(initData);
     if (respdata.status > 0) {
         window.location.href = AppConnect_1.HOST + respdata.href;
@@ -73,7 +58,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-const DEVHOST = 'https://foregor.vercel.app/';
+const DEVHOST = 'https://foregor.vercel.app/work/';
 // const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {
