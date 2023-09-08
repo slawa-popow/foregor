@@ -27,7 +27,7 @@ export class AppConnect {
 
     async getExcelFile() {
         try {
-            const resp = await fetch(this.host + 'getOprihodsExcel');
+            const resp = await fetch(this.host + 'getOprihodsExcel', {method: 'GET'});
             return await resp.blob();
         } catch (e) { console.log('error AppConnect -> getExcelFile()') } 
         return null;    
