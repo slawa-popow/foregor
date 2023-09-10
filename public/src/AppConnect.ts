@@ -1,8 +1,8 @@
 import { TelegramWebApps } from "telegram-webapps-types";
 import { DoOprihod, TypeInputOprihod } from "./types/TypesFrontend";
 
-const DEVHOST = 'https://foregor.vercel.app/';
-// const DEVHOST = '/';
+// const DEVHOST = 'https://foregor.vercel.app/';
+const DEVHOST = '/';
 export const HOST = DEVHOST;
 
 
@@ -21,8 +21,7 @@ export class AppConnect {
             },
             body: JSON.stringify({})
         });
-        const pathf = await resp.json() as {filePath: string}; 
-        return pathf.filePath;
+        return await resp.json();
     }
 
 
@@ -35,7 +34,8 @@ export class AppConnect {
                 },
                 body: JSON.stringify({})
             });
-            return await resp.json();
+            const pathf = await resp.json() as {filePath: string};
+            return pathf.filePath;
         } catch (e) { console.log('error AppConnect -> getExcelFile()') } 
         return null;    
     }

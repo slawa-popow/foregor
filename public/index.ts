@@ -20,7 +20,7 @@ setInterval( () => {
         datep.textContent = 'Таблица оприходования ' + 
                 new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"});
 }, 1000);
-
+ 
 (() =>{
     const inputCount = document.getElementById("sel-count");
     if (inputCount) {
@@ -108,7 +108,7 @@ firstStart();
 
 
 const dwnl = document.getElementById('input-downloadfile');
-
+window.Telegram.WebApp.ready();
 dwnl!.addEventListener('click', async (e) => {
     try {
         e.preventDefault();

@@ -106,6 +106,7 @@ if (cntOprihod && cntAllprd)
     }
 firstStart();
 const dwnl = document.getElementById('input-downloadfile');
+window.Telegram.WebApp.ready();
 dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         e.preventDefault();
@@ -155,8 +156,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-const DEVHOST = 'https://foregor.vercel.app/';
-// const DEVHOST = '/';
+// const DEVHOST = 'https://foregor.vercel.app/';
+const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {
     constructor(host) {
@@ -172,8 +173,7 @@ class AppConnect {
                 },
                 body: JSON.stringify({})
             });
-            const pathf = yield resp.json();
-            return pathf.filePath;
+            return yield resp.json();
         });
     }
     getExcelFile() {
@@ -186,7 +186,8 @@ class AppConnect {
                     },
                     body: JSON.stringify({})
                 });
-                return yield resp.json();
+                const pathf = yield resp.json();
+                return pathf.filePath;
             }
             catch (e) {
                 console.log('error AppConnect -> getExcelFile()');
@@ -1365,4 +1366,4 @@ var EnumPageName;
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=appI.js.map
+//# sourceMappingURL=appS.js.map
