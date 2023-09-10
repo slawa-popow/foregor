@@ -134,14 +134,14 @@ class MainController {
     // отдать все оприходования эксэль файлом
     async downloadEXELoprihod(_request: Request, response: Response) {
         const alldata = await db.getAllDataTable<TypeInputFormOprihod>(Table.Oprihod);
-        const filename = './public/allOprihods.xlsx';
+        const filename = __dirname + '../../../public/allOprihods.xlsx';
         
         const ws = reader.utils.json_to_sheet(alldata);
         const wb = reader.utils.book_new();
         utils.book_append_sheet(wb, ws, "Все оприходования");
         reader.writeFile(wb, filename);
         return response.download(filename);
-        
+        // return response.status(200).
     }
 
 
