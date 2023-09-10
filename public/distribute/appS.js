@@ -120,10 +120,10 @@ dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function
             const a = document.createElement('a');
             a.href = url;
             a.download = "AllOprihods.xlsx";
-            mWebApp.openLink(a.href);
-            // document.body.appendChild(a); 
-            // a.click();    
-            // a.remove();   
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            mWebApp.openLink(AppConnect_1.appcn.getLinkDownloadExcell());
         }
     }
     catch (e) {
@@ -159,6 +159,9 @@ class AppConnect {
     constructor(host) {
         this.host = exports.HOST;
         this.host = host;
+    }
+    getLinkDownloadExcell() {
+        return this.host + 'getOprihodsExcel';
     }
     getProdFolders(url) {
         return __awaiter(this, void 0, void 0, function* () {

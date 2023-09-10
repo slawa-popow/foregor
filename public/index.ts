@@ -127,10 +127,10 @@ dwnl!.addEventListener('click', async (e) => {
             const a = document.createElement('a');
             a.href = url;
             a.download = "AllOprihods.xlsx";
-            mWebApp.openLink(a.href);
-            // document.body.appendChild(a); 
-            // a.click();    
-            // a.remove();   
+            document.body.appendChild(a); 
+            a.click();    
+            a.remove();   
+            mWebApp.openLink(appcn.getLinkDownloadExcell());
         }
 
     } catch (e) { console.log('error download file', e) } 

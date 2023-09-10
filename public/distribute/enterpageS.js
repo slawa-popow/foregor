@@ -66,6 +66,9 @@ class AppConnect {
         this.host = exports.HOST;
         this.host = host;
     }
+    getLinkDownloadExcell() {
+        return this.host + 'getOprihodsExcel';
+    }
     getProdFolders(url) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield fetch(this.host + url, {

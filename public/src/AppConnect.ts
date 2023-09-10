@@ -13,6 +13,10 @@ export class AppConnect {
         this.host = host;
     }
 
+    getLinkDownloadExcell(): string {
+        return this.host + 'getOprihodsExcel';
+    }
+
     async getProdFolders(url: string) {
         const resp = await fetch(this.host + url, {
             method: 'POST',
