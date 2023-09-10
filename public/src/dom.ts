@@ -93,7 +93,7 @@ export const dom = (() => {
         let i = 0; 
          
         for (let el of form) {
-            if (i > 4) break;
+            if (i > 5) break;
             const name = names[i].split('-')[1];
             if (el instanceof HTMLSelectElement) {
                 const opts = el.childNodes as NodeListOf<HTMLOptionElement>;
@@ -106,6 +106,7 @@ export const dom = (() => {
                 }
                 fdata.append(name, value);
             } else if (el instanceof HTMLInputElement) {
+                
                 if (el.type === 'file') {
                     const fls = el.files;
                     if (fls) {

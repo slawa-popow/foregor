@@ -95,11 +95,11 @@ class MainController {
      */
     async formDataOprihod(request: MRequest, response: Response) {
         const errors = myValidationResult(request);
-         
         if (!errors.isEmpty()) {
             return response.status(400).json( [{ errors: errors.array({onlyFirstError: true}) }] );
         } 
         const bdata = request.body;
+
         const indata: TypeInputFormOprihod = bdata;
         indata.photoPath = request.photoPath;
         const result = await db.addProductToTableOprihod(indata);
@@ -134,14 +134,15 @@ class MainController {
     // отдать все оприходования эксэль файлом
     async downloadEXELoprihod(_request: Request, response: Response) {
         const alldata = await db.getAllDataTable<TypeInputFormOprihod>(Table.Oprihod);
-        const filename = __dirname + '../../../public/allOprihods.xlsx';
-        
+        // const filename = __dirname + '../../../public/allOprihods.xlsx';
+        const filename = '/home/p/pavel7rk/pavel7rk.beget.tech/public_html/allOprihods.xls'
         const ws = reader.utils.json_to_sheet(alldata);
         const wb = reader.utils.book_new();
         utils.book_append_sheet(wb, ws, "Все оприходования");
         reader.writeFile(wb, filename);
+
+
         return response.download(filename);
-        // return response.status(200).
     }
 
 

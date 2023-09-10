@@ -57,7 +57,7 @@ export async function authValidate (request: Request, response: Response, next: 
     if (request.session && request.session.auth) {
         const a = request.session.auth as {name: string, id: string, query_id: string};
         if (a && Object.keys(a).length > 0) {
-            const isStatus = await db.checkIdUser(a.id); 
+            const isStatus = await db.checkIdUser(a.id);
             if (isStatus.length > 0)
                 return next();
         }

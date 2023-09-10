@@ -152,7 +152,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-const DEVHOST = 'https://foregor.vercel.app/';
+// const DEVHOST = 'https://foregor.vercel.app/';
+const DEVHOST = 'https://kitopt24.site/';
 // const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {
@@ -746,7 +747,7 @@ exports.dom = (() => {
             const fdata = new FormData();
             let i = 0;
             for (let el of form) {
-                if (i > 4)
+                if (i > 5)
                     break;
                 const name = names[i].split('-')[1];
                 if (el instanceof HTMLSelectElement) {

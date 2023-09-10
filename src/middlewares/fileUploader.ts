@@ -24,8 +24,8 @@ function isDir(path: string): boolean {
     }
 }
 
-let pathUpload = process.env.DEV_PATH_UPLOAD_FILE;
-// const pathUpload = process.env.PROD_PATH_UPLOAD_FILE;
+// let pathUpload = process.env.DEV_PATH_UPLOAD_FILE;
+let pathUpload = process.env.PROD_PATH_UPLOAD_FILE || "/home/p/pavel7rk/pavel7rk.beget.tech/public_html/photos";
 
 if (process.platform === 'win32') {
     pathUpload = pathUpload?.replace(/[/]/g, '\\');
@@ -33,7 +33,8 @@ if (process.platform === 'win32') {
 
 const storage = multer.diskStorage({
     destination: (req: MRequest, _file, cb) => {
-        const dirpath = __dirname + pathUpload;
+        // const dirpath = __dirname + pathUpload;
+        const dirpath = pathUpload;
         req.photoPath = '';
         // если папки для сохранения файла не существует, 
         // to она будет создана по пути dirpath
