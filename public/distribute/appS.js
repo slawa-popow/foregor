@@ -114,16 +114,16 @@ dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function
         if (blob) {
             // const file = window.URL.createObjectURL(blob);
             // window.location.assign(file);
-            const mWebApp = window.Telegram.WebApp;
+            // const url = window.URL.createObjectURL(blob);
+            // const a = document.createElement('a');
+            // a.href = url;
+            // a.download = "AllOprihods.xlsx";
+            // document.body.appendChild(a); 
+            // a.click();    
+            // a.remove();   
+            const urllink = AppConnect_1.appcn.getLinkDownloadExcell();
             // @ts-ignore
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "AllOprihods.xlsx";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            mWebApp.openLink(AppConnect_1.appcn.getLinkDownloadExcell());
+            window.Telegram.WebApp.openLink(urllink);
         }
     }
     catch (e) {

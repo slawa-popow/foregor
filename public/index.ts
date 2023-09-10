@@ -14,9 +14,7 @@ declare const window: {
     Telegram: TelegramWebApps.SDK;
 } & Window;
 
-interface MWebApp extends TelegramWebApps.WebApp {
-    openLink(text: string): any;
-}
+
 
 const datep = document.getElementById('currenttime');  
 setInterval( () => {
@@ -121,16 +119,18 @@ dwnl!.addEventListener('click', async (e) => {
         if (blob) {
             // const file = window.URL.createObjectURL(blob);
             // window.location.assign(file);
-            const mWebApp = window.Telegram.WebApp as MWebApp;
+        
+            
+            // const url = window.URL.createObjectURL(blob);
+            // const a = document.createElement('a');
+            // a.href = url;
+            // a.download = "AllOprihods.xlsx";
+            // document.body.appendChild(a); 
+            // a.click();    
+            // a.remove();   
+            const urllink = appcn.getLinkDownloadExcell();
             // @ts-ignore
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "AllOprihods.xlsx";
-            document.body.appendChild(a); 
-            a.click();    
-            a.remove();   
-            mWebApp.openLink(appcn.getLinkDownloadExcell());
+            window.Telegram.WebApp.openLink(urllink);
         }
 
     } catch (e) { console.log('error download file', e) } 
