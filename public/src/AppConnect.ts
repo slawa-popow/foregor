@@ -21,14 +21,21 @@ export class AppConnect {
             },
             body: JSON.stringify({})
         });
-        return await resp.json();
+        const pathf = await resp.json() as {filePath: string}; 
+        return pathf.filePath;
     }
 
 
     async getExcelFile() {
         try {
-            const resp = await fetch(this.host + 'getOprihodsExcel');
-            return await resp.blob();
+            const resp = await fetch(this.host + 'getOprihodsExcel', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8' 
+                },
+                body: JSON.stringify({})
+            });
+            return await resp.json();
         } catch (e) { console.log('error AppConnect -> getExcelFile()') } 
         return null;    
     }

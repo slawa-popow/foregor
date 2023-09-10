@@ -8,8 +8,11 @@ import { dom } from "./src/dom";
 import { invoker } from "./src/invoke/Invoker";
 import { AllDataTableOprihod, AnswerOprihod, FillSelectPathNames, TableProducts } from "./src/page/clients";
 import { EnumPageName } from "./src/types/EnumPageName";
+import { TelegramWebApps } from 'telegram-webapps-types';
 
-
+declare const window: {
+    Telegram: TelegramWebApps.SDK;
+} & Window;
 
 const datep = document.getElementById('currenttime');  
 setInterval( () => {
@@ -77,7 +80,7 @@ const firstStart = async () => {
     const holderTableOprh = new ResultHolder(clientTableOptihod);
     const holderTO = new Holder('holderFirstStart', tableDataOpr);
     holderTableOprh.execute(holderTO);
-};
+}; 
 
 
 
@@ -105,24 +108,34 @@ firstStart();
 
 
 const dwnl = document.getElementById('input-downloadfile');
+
 dwnl!.addEventListener('click', async (e) => {
     try {
         e.preventDefault();
-        const blob = await appcn.getExcelFile();
-        if (blob) {
-            // const file = window.URL.createObjectURL(blob);
-            // window.location.assign(file);
-
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "AllOprihods.xlsx";
-            document.body.appendChild(a); 
-            a.click();    
-            a.remove();   
-        }
+        const filePathData = await appcn.getExcelFile();
+        window.Telegram.WebApp.sendData(filePathData);
 
     } catch (e) { console.log('error download file', e) } 
 })
+
+// dwnl!.addEventListener('click', async (e) => {
+//     try {
+//         e.preventDefault();
+//         const blob = await appcn.getExcelFile();
+//         if (blob) {
+//             // const file = window.URL.createObjectURL(blob);
+//             // window.location.assign(file);
+
+//             const url = window.URL.createObjectURL(blob);
+//             const a = document.createElement('a');
+//             a.href = url;
+//             a.download = "AllOprihods.xlsx";
+//             document.body.appendChild(a); 
+//             a.click();    
+//             a.remove();   
+//         }
+
+//     } catch (e) { console.log('error download file', e) } 
+// })
 
  

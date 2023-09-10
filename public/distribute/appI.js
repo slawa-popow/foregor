@@ -109,23 +109,30 @@ const dwnl = document.getElementById('input-downloadfile');
 dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         e.preventDefault();
-        const blob = yield AppConnect_1.appcn.getExcelFile();
-        if (blob) {
-            // const file = window.URL.createObjectURL(blob);
-            // window.location.assign(file);
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "AllOprihods.xlsx";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        }
+        const filePathData = yield AppConnect_1.appcn.getExcelFile();
+        window.Telegram.WebApp.sendData(filePathData);
     }
     catch (e) {
         console.log('error download file', e);
     }
 }));
+// dwnl!.addEventListener('click', async (e) => {
+//     try {
+//         e.preventDefault();
+//         const blob = await appcn.getExcelFile();
+//         if (blob) {
+//             // const file = window.URL.createObjectURL(blob);
+//             // window.location.assign(file);
+//             const url = window.URL.createObjectURL(blob);
+//             const a = document.createElement('a');
+//             a.href = url;
+//             a.download = "AllOprihods.xlsx";
+//             document.body.appendChild(a); 
+//             a.click();    
+//             a.remove();   
+//         }
+//     } catch (e) { console.log('error download file', e) } 
+// })
 
 
 /***/ }),
@@ -165,14 +172,21 @@ class AppConnect {
                 },
                 body: JSON.stringify({})
             });
-            return yield resp.json();
+            const pathf = yield resp.json();
+            return pathf.filePath;
         });
     }
     getExcelFile() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const resp = yield fetch(this.host + 'getOprihodsExcel');
-                return yield resp.blob();
+                const resp = yield fetch(this.host + 'getOprihodsExcel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify({})
+                });
+                return yield resp.json();
             }
             catch (e) {
                 console.log('error AppConnect -> getExcelFile()');

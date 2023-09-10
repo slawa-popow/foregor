@@ -140,8 +140,8 @@ class MainController {
         const wb = reader.utils.book_new();
         utils.book_append_sheet(wb, ws, "Все оприходования");
         reader.writeFile(wb, filename);
-        
-        return response.download(filename);
+        // return response.download(filename);
+        return response.status(200).json({filePath: filename});
     }
 
 
