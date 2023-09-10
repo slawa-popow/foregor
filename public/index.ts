@@ -14,6 +14,10 @@ declare const window: {
     Telegram: TelegramWebApps.SDK;
 } & Window;
 
+interface MWebApp extends TelegramWebApps.WebApp {
+    openLink(text: string): any;
+}
+
 const datep = document.getElementById('currenttime');  
 setInterval( () => {
     if (datep)
@@ -109,33 +113,28 @@ firstStart();
 
 const dwnl = document.getElementById('input-downloadfile');
 window.Telegram.WebApp.ready();
+
 dwnl!.addEventListener('click', async (e) => {
     try {
         e.preventDefault();
-        const filePathData = await appcn.getExcelFile();
-        window.Telegram.WebApp.sendData(filePathData);
+        const blob = await appcn.getExcelFile();
+        if (blob) {
+            // const file = window.URL.createObjectURL(blob);
+            // window.location.assign(file);
+            const mWebApp = window.Telegram.WebApp as MWebApp;
+            // @ts-ignore
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "AllOprihods.xlsx";
+            mWebApp.openLink(a.href);
+            // document.body.appendChild(a); 
+            // a.click();    
+            // a.remove();   
+        }
 
     } catch (e) { console.log('error download file', e) } 
 })
 
-// dwnl!.addEventListener('click', async (e) => {
-//     try {
-//         e.preventDefault();
-//         const blob = await appcn.getExcelFile();
-//         if (blob) {
-//             // const file = window.URL.createObjectURL(blob);
-//             // window.location.assign(file);
 
-//             const url = window.URL.createObjectURL(blob);
-//             const a = document.createElement('a');
-//             a.href = url;
-//             a.download = "AllOprihods.xlsx";
-//             document.body.appendChild(a); 
-//             a.click();    
-//             a.remove();   
-//         }
 
-//     } catch (e) { console.log('error download file', e) } 
-// })
-
- 

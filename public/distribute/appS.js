@@ -110,30 +110,26 @@ window.Telegram.WebApp.ready();
 dwnl.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         e.preventDefault();
-        const filePathData = yield AppConnect_1.appcn.getExcelFile();
-        window.Telegram.WebApp.sendData(filePathData);
+        const blob = yield AppConnect_1.appcn.getExcelFile();
+        if (blob) {
+            // const file = window.URL.createObjectURL(blob);
+            // window.location.assign(file);
+            const mWebApp = window.Telegram.WebApp;
+            // @ts-ignore
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "AllOprihods.xlsx";
+            mWebApp.openLink(a.href);
+            // document.body.appendChild(a); 
+            // a.click();    
+            // a.remove();   
+        }
     }
     catch (e) {
         console.log('error download file', e);
     }
 }));
-// dwnl!.addEventListener('click', async (e) => {
-//     try {
-//         e.preventDefault();
-//         const blob = await appcn.getExcelFile();
-//         if (blob) {
-//             // const file = window.URL.createObjectURL(blob);
-//             // window.location.assign(file);
-//             const url = window.URL.createObjectURL(blob);
-//             const a = document.createElement('a');
-//             a.href = url;
-//             a.download = "AllOprihods.xlsx";
-//             document.body.appendChild(a); 
-//             a.click();    
-//             a.remove();   
-//         }
-//     } catch (e) { console.log('error download file', e) } 
-// })
 
 
 /***/ }),
@@ -156,8 +152,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-// const DEVHOST = 'https://foregor.vercel.app/';
-const DEVHOST = '/';
+const DEVHOST = 'https://foregor.vercel.app/';
+// const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {
     constructor(host) {
@@ -179,15 +175,8 @@ class AppConnect {
     getExcelFile() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const resp = yield fetch(this.host + 'getOprihodsExcel', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    body: JSON.stringify({})
-                });
-                const pathf = yield resp.json();
-                return pathf.filePath;
+                const resp = yield fetch(this.host + 'getOprihodsExcel', { method: 'POST' });
+                return yield resp.blob();
             }
             catch (e) {
                 console.log('error AppConnect -> getExcelFile()');

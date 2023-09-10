@@ -39,13 +39,13 @@ class MainController {
         const teleData = request.body as Teledata;
 
         if (request.session && teleData && Object.keys(teleData).length > 0 
-            && teleData.user && teleData.user.id) {
+            && teleData.query_id && teleData.user && teleData.user.id) {
             const usid = '' + teleData.user.id;
             const result = await db.checkIdUser(usid);
             if (result.length > 0) {
                 const [name, tgid] = result;
                 const authStatus = {status: 200, href: 'work'};
-                request.session.auth = {name: name, id: tgid};
+                request.session.auth = {name: name, id: tgid, query_id: teleData.query_id || ''};
                 return response.status(200).json(authStatus);
             }
         }
@@ -140,8 +140,8 @@ class MainController {
         const wb = reader.utils.book_new();
         utils.book_append_sheet(wb, ws, "Все оприходования");
         reader.writeFile(wb, filename);
-        // return response.download(filename);
-        return response.status(200).json({filePath: filename});
+        return response.download(filename);
+        
     }
 
 

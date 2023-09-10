@@ -58,8 +58,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.appcn = exports.AppConnect = exports.HOST = void 0;
-// const DEVHOST = 'https://foregor.vercel.app/';
-const DEVHOST = '/';
+const DEVHOST = 'https://foregor.vercel.app/';
+// const DEVHOST = '/';
 exports.HOST = DEVHOST;
 class AppConnect {
     constructor(host) {
@@ -81,15 +81,8 @@ class AppConnect {
     getExcelFile() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const resp = yield fetch(this.host + 'getOprihodsExcel', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    body: JSON.stringify({})
-                });
-                const pathf = yield resp.json();
-                return pathf.filePath;
+                const resp = yield fetch(this.host + 'getOprihodsExcel', { method: 'POST' });
+                return yield resp.blob();
             }
             catch (e) {
                 console.log('error AppConnect -> getExcelFile()');

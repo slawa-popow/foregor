@@ -55,7 +55,7 @@ export async function isExistsNameColor (request: Request, response: Response, n
 
 export async function authValidate (request: Request, response: Response, next: NextFunction) {
     if (request.session && request.session.auth) {
-        const a = request.session.auth as {name: string, id: string};
+        const a = request.session.auth as {name: string, id: string, query_id: string};
         if (a && Object.keys(a).length > 0) {
             const isStatus = await db.checkIdUser(a.id);
             if (isStatus.length > 0)
