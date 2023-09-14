@@ -10,7 +10,7 @@ const mainRouter = Router();
 
 mainRouter.get('/',  mainController.getIndexPage);
 mainRouter.get('/work', authValidate, mainController.getWorkPage);
-mainRouter.post('/getTableOprihod', mainController.getTableOprihod);
+mainRouter.post('/getTableOprihod',  mainController.getTableOprihod);
 mainRouter.post('/deleteRow', deleteRowValid(), mainController.deleteRow);
 mainRouter.get('/getOprihodsExcel', mainController.downloadEXELoprihod);    // скачать файл 
     // добавить потом фильтр авторизации
@@ -30,6 +30,7 @@ mainRouter.post('/formOprihod',
                  mainController.formDataOprihod);
 
 mainRouter.post('/writeFromMyskladToDb', mainController.getAllProdFromMySkladAndWriteToDb);
+mainRouter.post('/refreshTokenSklad', mainController.refreshTokenSklad);
 
 mainRouter.post('/testdb', mainController.postTestDb);
 

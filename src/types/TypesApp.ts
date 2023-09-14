@@ -21,4 +21,18 @@ export interface Teledata {
     hash: string;
 }
 
+//{name: string, id: string, query_id: string}
+export interface AuthApp {
+    name: string,
+    id: string,
+    query_id ?: string;
+    sklad_token ?: string;
+}
+
+// смена токена (фронт тот же)
+export interface RefreshTokenData {
+    credential: string;
+    errors: string[];
+}
+
  

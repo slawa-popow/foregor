@@ -25,16 +25,24 @@ function isDir(path: string): boolean {
 }
 
 // let pathUpload = process.env.DEV_PATH_UPLOAD_FILE;
-let pathUpload = process.env.PROD_PATH_UPLOAD_FILE || "/home/p/pavel7rk/pavel7rk.beget.tech/public_html/photos";
+let pathUpload = process.env.PROD_PATH_UPLOAD_FILE || "/home/p/pavel7rk/pavel7rk.beget.tech/public_html/";
 
 if (process.platform === 'win32') {
     pathUpload = pathUpload?.replace(/[/]/g, '\\');
 }
 
+const mainHost = pathUpload;
+const publicHost = 'photos/';
+let dirpath = ''
+let pthname = '';
+
 const storage = multer.diskStorage({
     destination: (req: MRequest, _file, cb) => {
-        // const dirpath = __dirname + pathUpload;
-        const dirpath = pathUpload;
+        dirpath = mainHost + publicHost;
+        const indata = req.body;
+        const pathName = indata.pathName + '/' + indata.color + '/'; 
+        dirpath += pathName;
+        pthname = pathName;
         req.photoPath = '';
         // если папки для сохранения файла не существует, 
         // to она будет создана по пути dirpath
@@ -42,20 +50,23 @@ const storage = multer.diskStorage({
             req.photoPath = dirpath;
             cb(null, dirpath);
         } else {
-            fs.mkdir(dirpath, function(err) {
+            fs.mkdir(dirpath, { recursive: true }, function(err) {
                 if (err) {
                   console.log(err)
                 } else {
                   console.log("multer --> New directory successfully created.");
-                  req.photoPath = dirpath;
+                req.photoPath = dirpath;
                   cb(null, dirpath);
                 }
               })
         }
         
     },
-    filename: (_req, file, cb) => {
-        cb(null, file.originalname);
+    filename: (req: MRequest, file, cb) => {
+        const indata = req.body;
+        const fname = indata.name + '_' + file.originalname;
+        req.photoPath = 'https://kitopt24.site/' + publicHost + pthname + fname;
+        cb(null, fname);
     },
   });
 

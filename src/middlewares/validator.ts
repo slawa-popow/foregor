@@ -2,6 +2,8 @@ import { body } from "express-validator"
 import { Request, Response, NextFunction } from 'express';
 import { db } from "../database/MySqlAgent";
 import { TypeInputFormOprihod } from "../types/TypeInputFormOprihod";
+import { AuthApp } from "../types/TypesApp";
+
 
 export const uriSkladValid = () => {
     return body('URISklad').exists().withMessage('Не верная ссылка МойСклад')
@@ -32,7 +34,7 @@ export const colorNameFormOprihodValid = (value: string) => {
 export const countFormOprihodValid = () => {
     return body('count').exists().withMessage('поле должно существовать')
             .isNumeric().withMessage('в поле Количество должно быть только число')
-            .trim().isLength({min: 0, max: 6}).withMessage('не корректная длина значения');
+            .trim().isLength({min: 0, max: 16}).withMessage('не корректная длина значения');
 };
 
 
@@ -55,12 +57,15 @@ export async function isExistsNameColor (request: Request, response: Response, n
 
 export async function authValidate (request: Request, response: Response, next: NextFunction) {
     if (request.session && request.session.auth) {
-        const a = request.session.auth as {name: string, id: string, query_id: string};
+        const a = request.session.auth as AuthApp;
         if (a && Object.keys(a).length > 0) {
             const isStatus = await db.checkIdUser(a.id);
-            if (isStatus.length > 0)
+            if (isStatus.length > 0) {
+                const [name, tgid] = isStatus;
+                request.session.auth = {name: name, id: tgid,};
                 return next();
+            }
         }
     }
-    return response.status(404).send('Доступ запрещен.');
+    return response.status(404).send('Доступ запрещен или не валидный токен доступа к системе МойСклад.');
 }

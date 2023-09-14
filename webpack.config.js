@@ -19,13 +19,16 @@ module.exports = {
       jQuery: "jquery",
       "window.jQuery": "jquery'",
       "window.$": "jquery"
-    })
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
   ], 
 
-  // mode: 'production',
-  mode: 'development',
+  mode: 'production',
+  // mode: 'development',
   watch: true,
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -58,5 +61,6 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
+  
 
 };

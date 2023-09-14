@@ -1,5 +1,5 @@
 import { TelegramWebApps } from "telegram-webapps-types";
-import { DoOprihod, TypeInputOprihod } from "./types/TypesFrontend";
+import { DoOprihod, RefreshTokenData, TypeInputOprihod } from "./types/TypesFrontend";
 
 // const DEVHOST = 'https://foregor.vercel.app/';
 const DEVHOST = 'https://kitopt24.site/';
@@ -60,6 +60,34 @@ export class AppConnect {
         });
         const result = await response.json();
         
+        return result;
+    }
+
+
+    // перезаписать таблицу дб products 
+    async rewriteProductsTable() {
+        const resp = await fetch(this.host + 'writeFromMyskladToDb', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({})
+        });
+        const result = await resp.json() as {result: string};
+        return result;
+    }
+
+
+    // сменить токен
+    async sendRefreshToken(sendData: RefreshTokenData): Promise<RefreshTokenData> {
+        const response = await fetch(this.host + 'refreshTokenSklad', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+              body: JSON.stringify(sendData)
+        });
+        const result = await response.json();
         return result;
     }
 

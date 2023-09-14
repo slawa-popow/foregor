@@ -18,10 +18,13 @@
 <div class="cntPage container">
 <ul class="nav nav-pills" role="tablist" style="margin: 5px 0 25px 0;">
   <li class="nav-item border" id="li-menu-oprihod">
-    <a name="OPRIHOD" class="nav-link active" data-toggle="pill" href="#menu-oprihod">Оприходование</a>
+    <a name="OPRIHOD" class="nav-link active icons" data-toggle="pill" href="#menu-oprihod"><img src="styles/telega.png" style="margin-left: -10px; width: 30px; height: 20px;" alt=""> Оприходование</a>
   </li>
   <li class="nav-item border" id="li-menu-allprod">
-    <a name="ALL_PROD" class="nav-link" data-toggle="pill" href="#menu-allprod">Всё из Продукция Плиточка</a>
+    <a name="ALL_PROD" class="nav-link" data-toggle="pill" href="#menu-allprod"><img src="styles/allpath.png" style="margin-left: -10px; width: 20px; height: 20px;" alt=""> Всё из Продукция Плиточка</a>
+  </li>
+  <li class="nav-item border" id="li-menu-setting">
+    <a name="SETTING" class="nav-link" data-toggle="pill" href="#menu-setting"><img src="styles/setting.png" style="margin-left: -10px; width: 20px; height: 20px;" alt=""> Настройки</a>
   </li>
 </ul>
 
@@ -33,7 +36,7 @@
         <div class="row form-opihodov" >
 
         <form id="form_Oprihod" enctype="multipart/form-data">
-
+          <div id="statusinfo"><span id="oprinfocats" style="font-size: 0.8em;"></span><img id="loadoprcats" class="noloadstate" src="styles/load-img.gif" alt=""></div>
           <label for="sel-pathName">Категории:</label>
           <select class="form-control" id="sel-pathName" name="sellist-pathName">
            {{!-- ---- dynamic fill ---- --}}
@@ -58,7 +61,7 @@
           </select>
 
           <label for="count-products">Количество:</label>
-          <input id="sel-count" placeholder="Количество" type="number" class="form-control" id="count-products" name="sellist-count">
+          <input id="sel-count" placeholder="Количество" type="number" class="form-control"  id="count-products" name="sellist-count">
 
           <label for="sel-photo">Фото:</label>
           <input id="sel-photo" type="file" name="sellist-photo" accept="image/*" class="form-control-file border btn-sm">
@@ -82,17 +85,17 @@
         <div class="row">
           <div class="col-sm">
             <div class="col d-flex justify-content-start" style="font-size: 0.8em;">
-              <input type="checkbox" id="issendsklad" class="form-check-input" value="" style="transform:scale(1.4); ">Отправить оприходования в МойСклад?
+              <input type="checkbox" id="issendsklad" class="form-check-input" value="" style="transform:scale(1.8); ">Отправить оприходования в "МойСклад"?
             </div>
           </div>
           <div class="col-sm ">
             <div class="col d-flex justify-content-end"> <span id="oprihodinfo" style="font-size: 0.8em; padding-right: 10px;"></span><img id="loadoprihod" class="noloadstate" src="styles/load-img.gif" alt="" style="margin-bottom: 10px;"> </div>
           </div>
           <div class="col-sm ">
-            <div class="col d-flex justify-content-end"><button id="input-oprihod" type="submit" class="btn btn-success">Оприходовать</button></div>
+            <div class="col d-flex justify-content-end"><button id="input-oprihod" type="submit" class="btn btn-success" style="font-size: 1.1em;">Оприходовать</button></div>
           </div>
           <div class="col-sm ">
-              <div class="col d-flex justify-content-end"><button id="input-downloadfile" class="btn-sm btn-secondary" style="margin-top: 25px;">Скачать все оприходования</button></div>
+              <div class="col d-flex justify-content-end"><button id="input-downloadfile" class="btn-sm btn-secondary" style="padding: 4px; margin-top: 25px;"><img src="styles/exceli.png" style="margin-left: -2px; width: 25px; height: 25px;" alt=""> Скачать все оприходования</button></div>
           </div>
           </div>
           <div class="row" style="margin-left: -30px; padding-left: 0;">
@@ -126,6 +129,59 @@
     </div>
 
   </div>
+                         {{!-- -------------- --}}
+  <div class="tab-pane container fade" id="menu-setting">
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-sm">
+          <p style="margin-bottom: 10px; font-size: 1.1em;">Некоторые настройки:</p>
+        </div>
+      </div>
+
+      <div class="bckg-row">
+        <div class="row">
+          <div class="col-sm">
+            <p style="font-size: 0.8em;">Выгрузить все данные о продукции из раздела "Продукция Плиточка" МойСклад в базу данных.</p>
+
+            <div class="row">
+                <div class="col-sm-6">
+                  <button id="rewrite-db" type="submit" class="btn-sm btn-primary">Перезаписать таблицу бд</button>
+                </div>
+                <div class="col-sm-6">
+                  <div id="statusinfo"><span id="errinforewrite" style="font-size: 0.8em;"></span><img id="loadstaterewrite" class="noloadstate" src="styles/load-img.gif" alt=""></div>
+                  <p id="info-rewriteDb"></p>
+                </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <br>
+       <div class="bckg-row">
+        <div class="row">
+          <div class="col-sm">
+            <p style="font-size: 0.8em;">Заменить токен доступа к api "МойСклад"</p>
+
+            <div style="padding: 10px; width: 180px;">
+              <form id="form_refresh_token" enctype="multipart/form-data" name="form_refresh_token">
+                <label for="sklad-login">логин МойСклад:</label>
+                <input id="sklad-login" placeholder="логин МойСклад" type="text" class="form-control" name="sklad-login"> 
+
+                <label for="sklad-password">пароль МойСклад:</label>
+                <input id="sklad-password" placeholder="пароль МойСклад" type="password" class="form-control" name="sklad-password">
+                <br>
+                <button id="refresh-token" type="submit" class="btn-sm btn-danger">заменить токен</button>
+                <p id="resultreftoken" style="font-size: 0.8em;"></p>
+              </form>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+
 </div>
 </div>
 {{!-- --------------------------------------------------------------------- --}}

@@ -63,7 +63,7 @@ export const dom = (() => {
             option.setAttribute('id', `${select.id}_${i}`);
             option.setAttribute('value', v);
             const shortSplitPathName = v.split('/');
-            const shortPname = shortSplitPathName.slice(shortSplitPathName.length-2, shortSplitPathName.length).join('/');
+            const shortPname = shortSplitPathName.slice(shortSplitPathName.length-1, shortSplitPathName.length).join('/');
             option.textContent = shortPname;
             select?.appendChild(option);
         });

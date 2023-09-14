@@ -25,9 +25,15 @@ export interface TypeInputOprihod {
     errors ?: Array<{message: string, field: string}>;
 }
 
-// команда оприходовать. Отправить с запросом кто, его роль в системе...
+// команда оприходовать. Отправить с запросом ! кто, его роль в системе...
 export interface DoOprihod {
     who: string;
     role: string;
     isSendSklad: boolean;
+}
+
+// смена токена (бэк тот же)
+export interface RefreshTokenData {
+    credential: string;
+    errors: string[];
 }

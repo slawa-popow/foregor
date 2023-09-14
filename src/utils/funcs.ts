@@ -1,5 +1,5 @@
 import { DopAttributes, MinimizeResponseListProds, PatchesToProductList, PathNamePlitochka, ProductsByPathCats,  } from "../types/TypesMySklad";
-// import { mySklad } from "../mysklad/MySklad";
+import { mySklad } from "../mysklad/MySklad";
 
 export async function getPatchesToProductList(productFolders: PathNamePlitochka[]): Promise<PatchesToProductList[]> {
     let arrPathName = new Set();
@@ -21,12 +21,14 @@ export async function getPatchesToProductList(productFolders: PathNamePlitochka[
 
 export async function createPathForGetProdList(arrNameGroup: PatchesToProductList[]): Promise<any> {
     const patchesCats: string[] = [];
-    const allPatches: string[] = [];
+    const allPatches: string[] = ['Продукция Плиточка'];
     let re = /\//gi;
-    arrNameGroup.forEach((v: PatchesToProductList) => {
+    for(let v of arrNameGroup) {
         const uri = v.pathName + '/' + v.name;
-        patchesCats.push(uri);
-    });
+        const respskl = await mySklad.getProductByCatsFromSklad(uri);
+        if (respskl && Array.isArray(respskl) && respskl.length > 0)
+            patchesCats.push(uri);
+    };
     
     allPatches.push(...patchesCats);
     allPatches.sort((a: string, b: string) => {

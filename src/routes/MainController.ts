@@ -5,13 +5,14 @@ import { MinimizeResponseListProds, PathNamePlitochka, ProductsByPathCats, Query
 import { createPathForGetProdList, getMinimizeListProds, getPatchesToProductList, preparedDataToWrite } from '../utils/funcs';
 import { myValidationResult } from '../customErrors/customErrField';
 import { DoOprihod, TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
-import { MRequest, Teledata } from '../types/TypesApp';
+import { MRequest, RefreshTokenData, Teledata } from '../types/TypesApp';
 import reader, { utils } from 'xlsx';
 
 
 class MainController {
 
     async getIndexPage(_request: Request, response: Response) {
+
         return response.status(200).render('enterA', {
             layout: 'authA', }); 
     }
@@ -20,6 +21,7 @@ class MainController {
         if (request.session && request.session.auth) {
             const name = request.session.auth.name;
             const id = request.session.auth.id;
+            
             return response.status(200).render('indexA', {
                 layout: 'mainA', 
                 data: {
@@ -45,7 +47,7 @@ class MainController {
             if (result.length > 0) {
                 const [name, tgid] = result;
                 const authStatus = {status: 200, href: 'work'};
-                request.session.auth = {name: name, id: tgid, query_id: teleData.query_id || ''};
+                request.session.auth = {name: name, id: tgid, query_id: teleData.query_id || '',};
                 return response.status(200).json(authStatus);
             }
         }
@@ -54,8 +56,20 @@ class MainController {
     }
 
 
+    async refreshTokenSklad(request: Request, response: Response) {
+        const refData: RefreshTokenData = request.body;
+         
+        const newTokenData = await mySklad.refreshAccessToken(refData.credential);
+        if (newTokenData){
+            return response.status(200).json({credential: newTokenData, errors: []});
+        }
+        return response.status(404).json({credential: '', errors: ['Не верный логин/пароль']})
+    }
+
+
     
     async getAllProdFolder(_request: Request, response: Response) {
+         
         const productFolders: PathNamePlitochka[] = await mySklad.getAllProductFolders();
         const arrPathName = await getPatchesToProductList(productFolders);
         const arrPathes = await createPathForGetProdList(arrPathName);
@@ -185,7 +199,8 @@ class MainController {
     async getAllProdFromMySkladAndWriteToDb(_request: Request, response: Response) {
     
         let nexthref: string | null | undefined = mySklad.pathes.product;
-
+        await db.deleteCreateTableProducts();
+        
             while (nexthref) {
         
                 let limRes: QueryProducts<ProductsByPathCats> = await mySklad.getAllProduct<ProductsByPathCats>(nexthref);

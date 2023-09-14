@@ -5,7 +5,7 @@ import { Pool } from "mysql2/promise";
 import dotenv from 'dotenv';
 import { AttributesByPathName, IReturnGetUniqPathes } from '../types/TypesDB';
 import { TypeInputFormOprihod } from '../types/TypeInputFormOprihod';
-import { createTableAllOprihod, createTableOprihod } from './preparedSQL';
+import { createTableAllOprihod, createTableOprihod, createTableProduct } from './preparedSQL';
 import { mySklad } from '../mysklad/MySklad';
 import { TypeJoinOprihod } from '../types/TypesMySklad';
 
@@ -19,6 +19,7 @@ export enum Table {
     OneOprihod='one_oprihod',
     Oprihod='oprihod',
     Admins='admins',
+    TokenMySklad='token_mysklad',
 };
 
 class MySqlAgent {
@@ -59,11 +60,11 @@ class MySqlAgent {
                 const [clrs, _services_colors] = await connection.query(`
                 SELECT DISTINCT color FROM ${Table.Products} WHERE pathName IN ("${pathName}") AND color<>'';
                 `);
-
+                await connection.commit();
                 const [nms, _services_names] = await connection.query(`
                 SELECT DISTINCT name FROM ${Table.Products} WHERE pathName IN ("${pathName}") AND name<>'';
                 `);
-
+                await connection.commit();
                 const colors = clrs as {color: string}[];
                 const names = nms as {name: string}[];
 
@@ -84,13 +85,16 @@ class MySqlAgent {
     }
 
 
+
     async checkIdUser(usid: string): Promise<string[]> {
-        const connection = await this.pool!.getConnection();
+        const connection = await this.pool!.getConnection(); 
         try {
             if (connection) {
                 const [_res, _serv] = await connection.query(`SELECT name, telegram_id FROM ${Table.Admins} WHERE telegram_id=${usid}`);
-                const res = _res as {name: string, telegram_id: string}[];
+                await connection.commit();
+                const res = _res as {name: string, telegram_id: string, sklad_token: string}[];
                 if (res.length > 0)
+                    
                     return [res[0].name, res[0].telegram_id]; 
             }
 
@@ -110,6 +114,7 @@ class MySqlAgent {
         try {
             if (connection) {
                 await connection.query(createTableOprihod(tableName));
+                await connection.commit();
                 return true;
             }
 
@@ -129,6 +134,7 @@ class MySqlAgent {
             if (connection) {
                 await this.createTableIfNotExist(tableName);
                 const [_allData, _services] = await connection.query(`SELECT * FROM ${tableName};`);
+                await connection.commit();
                 const allData = _allData as T[];  
                 return allData;
             }
@@ -152,6 +158,7 @@ class MySqlAgent {
         try {
             if (connection) {
                 await connection.query(`DELETE FROM ${Table.OneOprihod} WHERE id=${rowId};`);
+                await connection.commit();
                 const res = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod); 
                 return res;
             }
@@ -178,36 +185,35 @@ class MySqlAgent {
                         ON ${Table.OneOprihod}.products_id=${Table.Products}.id;
                     `);
                     const arrIds = _arrIds as TypeJoinOprihod[];
-                    const mysklResult =  await mySklad.oprihod(arrIds);
+                    await mySklad.oprihod(arrIds);
                     
-                    return [mysklResult];
-                } else {
-                    const table = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod);
-                    const todayDate = new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"});
-                    await connection.query(createTableAllOprihod(Table.Oprihod));   // если не сущ.
+                }
+                const table = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod);
+                const todayDate = new Date().toLocaleString("ru-RU", {timeZone: "Europe/Moscow"});
+                await connection.query(createTableAllOprihod(Table.Oprihod));   // если не сущ.
 
-                    if (table.length > 0) {
-                        for (let d of table) {
-                            const barr = [
-                                d.products_id || '',
-                                todayDate || '',
-                                d.name || '',
-                                d.color || '',
-                                d.article || '',
-                                d.count || 0,
-                                d.pathName || '',
-                                d.date || '',
-                                d.time || '',
-                                d.photoPath || ''
-                            ] ;
-                            await connection.query(`
-                            INSERT INTO ${Table.Oprihod}(products_id, date_oprihod, name, color, article, count, pathName, date, time, photoPath)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                            `, barr);
-                        }
+                if (table.length > 0) {
+                    for (let d of table) {
+                        const barr = [
+                            d.products_id || '',
+                            todayDate || '',
+                            d.name || '',
+                            d.color || '',
+                            d.article || '',
+                            d.count || 0,
+                            d.pathName || '',
+                            d.date || '',
+                            d.time || '',
+                            d.photoPath || ''
+                        ] ;
+                        await connection.query(`
+                        INSERT INTO ${Table.Oprihod}(products_id, date_oprihod, name, color, article, count, pathName, date, time, photoPath)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        `, barr);
                     }
                 }
-                await connection.query(`DROP TABLE ${Table.OneOprihod};`)
+                await connection.query(`DROP TABLE ${Table.OneOprihod};`);
+                await connection.commit();
             }
 
         } catch (e) { console.log('Error in MySqlAgent->doOprihod()->catch', e) } 
@@ -229,6 +235,7 @@ class MySqlAgent {
 
         } catch (e) { console.log('Error in MySqlAgent->setTestData()->catch', e) } 
         finally {
+            await connection.commit();
             connection.release();
         }
         return [];
@@ -255,6 +262,7 @@ class MySqlAgent {
                     (products_id, name, color, article, count, pathName, date, time, photoPath)
                     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `, arrValues); 
+                await connection.commit();
                 const allOprihod = await this.getAllDataTable<TypeInputFormOprihod>(Table.OneOprihod);
                 return allOprihod;
             }
@@ -284,34 +292,61 @@ class MySqlAgent {
 
         } catch (e) { console.log('Error in MySqlAgent->getUniqPathes()->catch', e) } 
         finally {
+            await connection.commit();
             connection.release();
         }
         return [];
     };
 
 
+    // удалить таблицу products и создать
+    async deleteCreateTableProducts(tableName: string = Table.Products) { 
+        const connection = await this.pool!.getConnection();
+        try {
+            if (connection) {
+                await connection.query(`DROP TABLE ${Table.OneOprihod};`);
+                await connection.commit();
+                await connection.query(`DROP TABLE IF EXISTS ${tableName};`);
+                await connection.commit();
+                await connection.query(createTableProduct(tableName));
+                await connection.commit();
+                await this.createTableIfNotExist(Table.OneOprihod);
+            }
+
+        } catch (e) { console.log('Error in MySqlAgent->deleteTable()->catch', e) } 
+        finally {
+            connection.release();
+        }
+        return;
+    } 
+
+
+
     async writeAllProducts(data: (string | number | boolean)[]): Promise<boolean> {
         const connection = await this.pool!.getConnection();
         try {
             if (connection) {
-                connection.query(`INSERT INTO ${Table.Products}
+                
+                await connection.query(`INSERT INTO ${Table.Products}
                 (pid, name, color, accountId, shared, 
                 updated, full_name, code, externalCode, archived, 
                 pathName, effectiveVat, effectiveVatEnabled, vat, vatEnabled, 
                 useParentVat, taxSystem, paymentItemType, discountProhibited, weighed, 
                 weight, volume, variantsCount, isSerialTrackable) 
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, data);
-                
+                await connection.commit();
                 return true;
             }
 
-        } catch (e) { console.log('Error in MySqlAgent->setTestData()->catch', e) } 
+        } catch (e) { console.log('Error in MySqlAgent->writeAllProducts()->catch', e) } 
         finally {
             connection.release();
         }
         return false;
     }
-    
+
+
+      
 
 
     //--------- test --------------------------------------
